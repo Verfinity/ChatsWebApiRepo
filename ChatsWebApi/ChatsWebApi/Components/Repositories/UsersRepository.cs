@@ -17,6 +17,10 @@ namespace ChatsWebApi.Components.Repositories
         {
             using (var conn = new SqlConnection(_connStr))
             {
+                List<User> usersWithSameNickName = (await conn.QueryAsync<User>("SELECT * FROM Users WHERE NickName = @NickName", new { NickName = item.NickName })).ToList();
+                if (usersWithSameNickName.Count > 0)
+                    return false;
+
                 int result = await conn.ExecuteAsync("INSERT INTO Users(FirstName, LastName, NickName) VALUES(@FirstName, @LastName, @NickName);", item);
                 return result > 0;
             }

@@ -16,15 +16,39 @@ namespace ChatsWebApi.Components.Controllers
         }
 
         [HttpGet]
-        public async Task<List<User>> GetUsersAsync()
+        public async Task<ActionResult<List<User>>> GetUsersAsync()
         {
-            return await _usersRepo.GetAllAsync();
+            List<User> users = await _usersRepo.GetAllAsync();
+            if (users != null)
+                return Ok(users);
+            return NoContent();
+        }
+
+        [HttpGet]
+        [Route("{id}")]
+        public async Task<ActionResult<User?>> GetUserByIdAsync([FromRoute] int id)
+        {
+            User? user = await _usersRepo.GetByIdAsync(id);
+            if (user != null)
+                return Ok(user);
+            return NoContent();
         }
 
         [HttpPost]
-        public async Task CreateUser([FromBody] User user)
+        public async Task<ActionResult> CreateUser([FromBody] User user)
         {
-            await _usersRepo.CreateAsync(user);
+            if (await _usersRepo.CreateAsync(user))
+                return Ok();
+            return BadRequest("This nickname already used");
+        }
+
+        [HttpDelete]
+        [Route("{id}")]
+        public async Task<ActionResult> DeleteUserAsync([FromRoute] int id)
+        {
+            if (await _usersRepo.DeleteAsync(id))
+                return Ok();
+            return BadRequest();
         }
     }
 }

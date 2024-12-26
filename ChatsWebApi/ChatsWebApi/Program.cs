@@ -15,6 +15,7 @@ namespace ChatsWebApi
             builder.Services.AddSingleton(new DBSettings(connStr));
 
             builder.Services.AddTransient<IRepository<User>, UsersRepository>();
+            builder.Services.AddTransient<IChatRepository, ChatsRepository>();
 
             builder.Services.AddControllers();
 

@@ -5,7 +5,7 @@ using Dapper;
 
 namespace ChatsWebApi.Components.Repositories
 {
-    public class ChatsRepository : IRepository<Chat>
+    public class ChatsRepository : IChatRepository
     {
         private readonly string _connStr;
 
@@ -47,6 +47,28 @@ namespace ChatsWebApi.Components.Repositories
             {
                 Chat? chat = await conn.QueryFirstOrDefaultAsync<Chat>("SELECT * FROM Chats WHERE Id = @Id;", new { Id = id });
                 return chat;
+            }
+        }
+
+        private record ChatsToUsers
+        {
+            public required int ChatId { get; set; }
+            public required int UserId { get; set; }
+        }
+
+        public async Task<List<Chat>> GetChatsByUserIdAsync(int userId)
+        {
+            using (var conn = new SqlConnection(_connStr))
+            {
+                List<ChatsToUsers> chatsToUsers = (await conn.QueryAsync<ChatsToUsers>("SELECT * FROM ChatsToUsers WHERE UserId = @UserID", new {UserId = userId})).ToList();
+
+                List<Chat> chats = chatsToUsers.Count > 0 ? new List<Chat>() : null;
+                foreach (ChatsToUsers chatToUser in chatsToUsers)
+                {
+                    chats.Add(await GetByIdAsync(chatToUser.ChatId));
+                }
+
+                return chats;
             }
         }
     }

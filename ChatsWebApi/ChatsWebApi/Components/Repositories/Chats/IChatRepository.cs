@@ -1,6 +1,6 @@
 ﻿using ChatsWebApi.Components.Types;
 
-namespace ChatsWebApi.Components.Repositories
+namespace ChatsWebApi.Components.Repositories.Chats
 {
     public interface IChatRepository : IRepository<Chat>
     {

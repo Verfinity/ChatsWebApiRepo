@@ -1,4 +1,7 @@
 using ChatsWebApi.Components.Repositories;
+using ChatsWebApi.Components.Repositories.Chats;
+using ChatsWebApi.Components.Repositories.Posts;
+using ChatsWebApi.Components.Repositories.Users;
 using ChatsWebApi.Components.Settings;
 using ChatsWebApi.Components.Types;
 
@@ -16,6 +19,7 @@ namespace ChatsWebApi
 
             builder.Services.AddTransient<IRepository<User>, UsersRepository>();
             builder.Services.AddTransient<IChatRepository, ChatsRepository>();
+            builder.Services.AddTransient<IPostRepository, PostsRepository>();
 
             builder.Services.AddControllers();
 

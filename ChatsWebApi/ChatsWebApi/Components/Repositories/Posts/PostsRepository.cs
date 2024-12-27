@@ -3,9 +3,9 @@ using ChatsWebApi.Components.Types;
 using System.Data.SqlClient;
 using Dapper;
 
-namespace ChatsWebApi.Components.Repositories
+namespace ChatsWebApi.Components.Repositories.Posts
 {
-    public class PostsRepository : IRepository<Post>
+    public class PostsRepository : IPostRepository
     {
         private readonly string _connStr;
 
@@ -14,12 +14,13 @@ namespace ChatsWebApi.Components.Repositories
             _connStr = dbSettings.ConnectionString;
         }
 
-        public async Task<bool> CreateAsync(Post item)
+        public async Task<int?> CreateAsync(Post item)
         {
             using (var conn = new SqlConnection(_connStr))
             {
-                int result = await conn.ExecuteAsync("INSERT INTO Posts(Title, Content, IsLast, SenderUserId, RecipientUserId) VALUES(@Title, @Content, @IsLast, @SenderUserId, @RecipientUserId);", item);
-                return result > 0;
+                int result = await conn.QuerySingleAsync<int>("INSERT INTO Posts(Content, IsLast, SenderUserId, ChatId) VALUES(@Content, @IsLast, @SenderUserId, @RecipientUserId, @ChatId);" +
+                    "SELECT CAST(SCOPE_IDENTITY() as int)", item);
+                return result;
             }
         }
 
@@ -47,6 +48,15 @@ namespace ChatsWebApi.Components.Repositories
             {
                 Post? post = await conn.QueryFirstOrDefaultAsync<Post>("SELECT * FROM Posts WHERE Id = @Id;", new { Id = id });
                 return post;
+            }
+        }
+
+        public async Task<List<Post>> GetPostsByChatIdAsync(int chatId)
+        {
+            using (var conn = new SqlConnection(_connStr))
+            {
+                List<Post> posts = (await conn.QueryAsync<Post>("SELECT * FROM Posts WHERE ChatId = @ChatId", new { ChatId = chatId })).ToList();
+                return posts;
             }
         }
     }

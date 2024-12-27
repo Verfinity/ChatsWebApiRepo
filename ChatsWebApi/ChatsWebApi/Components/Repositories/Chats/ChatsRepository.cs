@@ -3,7 +3,7 @@ using ChatsWebApi.Components.Types;
 using System.Data.SqlClient;
 using Dapper;
 
-namespace ChatsWebApi.Components.Repositories
+namespace ChatsWebApi.Components.Repositories.Chats
 {
     public class ChatsRepository : IChatRepository
     {
@@ -14,12 +14,17 @@ namespace ChatsWebApi.Components.Repositories
             _connStr = dbSettings.ConnectionString;
         }
 
-        public async Task<bool> CreateAsync(Chat item)
+        public async Task<int?> CreateAsync(Chat item)
         {
             using (var conn = new SqlConnection(_connStr))
             {
-                int result = await conn.ExecuteAsync("INSERT INTO Chats(FirstUserId, SecondUserId) VALUES(@FirstUserId, @SecondUserId);", item);
-                return result > 0;
+                int result = await conn.QuerySingleAsync<int>("INSERT INTO Chats(FirstUserId, SecondUserId) VALUES(@FirstUserId, @SecondUserId);" +
+                    "SELECT CAST(SCOPE_IDENTITY() as int)", item);
+
+                await conn.ExecuteAsync("INSERT INTO ChatsToUsers(ChatId, UserId) VALUES(@ChatId, @UserId);", new { ChatId = item.Id, UserId = item.FirstUserId });
+                await conn.ExecuteAsync("INSERT INTO ChatsToUsers(ChatId, UserId) VALUES(@ChatId, @UserId);", new { ChatId = item.Id, UserId = item.SecondUserId });
+
+                return result;
             }
         }
 
@@ -60,7 +65,7 @@ namespace ChatsWebApi.Components.Repositories
         {
             using (var conn = new SqlConnection(_connStr))
             {
-                List<ChatsToUsers> chatsToUsers = (await conn.QueryAsync<ChatsToUsers>("SELECT * FROM ChatsToUsers WHERE UserId = @UserID", new {UserId = userId})).ToList();
+                List<ChatsToUsers> chatsToUsers = (await conn.QueryAsync<ChatsToUsers>("SELECT * FROM ChatsToUsers WHERE UserId = @UserID", new { UserId = userId })).ToList();
 
                 List<Chat> chats = chatsToUsers.Count > 0 ? new List<Chat>() : null;
                 foreach (ChatsToUsers chatToUser in chatsToUsers)

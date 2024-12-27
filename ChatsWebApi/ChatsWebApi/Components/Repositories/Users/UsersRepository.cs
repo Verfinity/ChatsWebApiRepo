@@ -3,7 +3,7 @@ using ChatsWebApi.Components.Types;
 using Dapper;
 using System.Data.SqlClient;
 
-namespace ChatsWebApi.Components.Repositories
+namespace ChatsWebApi.Components.Repositories.Users
 {
     public class UsersRepository : IRepository<User>
     {
@@ -13,16 +13,17 @@ namespace ChatsWebApi.Components.Repositories
             _connStr = dbSettings.ConnectionString;
         }
 
-        public async Task<bool> CreateAsync(User item)
+        public async Task<int?> CreateAsync(User item)
         {
             using (var conn = new SqlConnection(_connStr))
             {
-                List<User> usersWithSameNickName = (await conn.QueryAsync<User>("SELECT * FROM Users WHERE NickName = @NickName", new { NickName = item.NickName })).ToList();
+                List<User> usersWithSameNickName = (await conn.QueryAsync<User>("SELECT * FROM Users WHERE NickName = @NickName", new { item.NickName })).ToList();
                 if (usersWithSameNickName.Count > 0)
-                    return false;
+                    return null;
 
-                int result = await conn.ExecuteAsync("INSERT INTO Users(FirstName, LastName, NickName) VALUES(@FirstName, @LastName, @NickName);", item);
-                return result > 0;
+                int result = await conn.QuerySingleAsync<int>("INSERT INTO Users(FirstName, LastName, NickName) VALUES(@FirstName, @LastName, @NickName);" +
+                    "SELECT CAST(SCOPE_IDENTITY() as int)", item);
+                return result;
             }
         }
 
@@ -30,7 +31,7 @@ namespace ChatsWebApi.Components.Repositories
         {
             using (var conn = new SqlConnection(_connStr))
             {
-                int result = await conn.ExecuteAsync("DELETE FROM Users WHERE Id = @Id;", new {Id = id});
+                int result = await conn.ExecuteAsync("DELETE FROM Users WHERE Id = @Id;", new { Id = id });
                 return result > 0;
             }
         }
@@ -48,7 +49,7 @@ namespace ChatsWebApi.Components.Repositories
         {
             using (var conn = new SqlConnection(_connStr))
             {
-                User? user = await conn.QueryFirstOrDefaultAsync<User>("SELECT * FROM Users WHERE Id = @Id;", new {Id = id});
+                User? user = await conn.QueryFirstOrDefaultAsync<User>("SELECT * FROM Users WHERE Id = @Id;", new { Id = id });
                 return user;
             }
         }

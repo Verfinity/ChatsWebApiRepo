@@ -8,7 +8,7 @@ namespace ChatsWebApi.Components.Controllers
     [Route("api/[controller]")]
     public class UsersController : ControllerBase
     {
-        private IRepository<User> _usersRepo;
+        private readonly IRepository<User> _usersRepo;
 
         public UsersController(IRepository<User> usersRepo)
         {
@@ -35,10 +35,11 @@ namespace ChatsWebApi.Components.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> CreateUser([FromBody] User user)
+        public async Task<ActionResult<int>> CreateUser([FromBody] User user)
         {
-            if (await _usersRepo.CreateAsync(user))
-                return Ok();
+            int? newUserId = await _usersRepo.CreateAsync(user);
+            if (newUserId != null)
+                return Ok(newUserId);
             return BadRequest("This nickname already used");
         }
 

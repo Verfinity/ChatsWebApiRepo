@@ -20,9 +20,9 @@ namespace ChatsWebApi.Components.Repositories.Chats
             {
                 int result = await conn.QuerySingleAsync<int>("INSERT INTO Chats(FirstUserId, SecondUserId) VALUES(@FirstUserId, @SecondUserId);" +
                     "SELECT CAST(SCOPE_IDENTITY() as int)", item);
-
-                await conn.ExecuteAsync("INSERT INTO ChatsToUsers(ChatId, UserId) VALUES(@ChatId, @UserId);", new { ChatId = item.Id, UserId = item.FirstUserId });
-                await conn.ExecuteAsync("INSERT INTO ChatsToUsers(ChatId, UserId) VALUES(@ChatId, @UserId);", new { ChatId = item.Id, UserId = item.SecondUserId });
+                
+                await conn.ExecuteAsync("INSERT INTO ChatsToUsers(ChatId, UserId) VALUES(@ChatId, @UserId);", new { ChatId = result, UserId = item.FirstUserId });
+                await conn.ExecuteAsync("INSERT INTO ChatsToUsers(ChatId, UserId) VALUES(@ChatId, @UserId);", new { ChatId = result, UserId = item.SecondUserId });
 
                 return result;
             }
@@ -32,6 +32,8 @@ namespace ChatsWebApi.Components.Repositories.Chats
         {
             using (var conn = new SqlConnection(_connStr))
             {
+                await conn.ExecuteAsync("DELETE FROM ChatsToUsers WHERE ChatId = @Id", new { Id = id });
+
                 int result = await conn.ExecuteAsync("DELETE FROM Chats WHERE Id = @Id;", new { Id = id });
                 return result > 0;
             }

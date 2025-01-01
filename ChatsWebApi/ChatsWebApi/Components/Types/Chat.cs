@@ -3,7 +3,8 @@
     public class Chat
     {
         public int Id { get; set; }
-        public required int FirstUserId { get; set; }
-        public required int SecondUserId { get; set; }
+        public required string Name { get; set; }
+        public int CountOfMembers { get; set; }
+        public required List<int> UsersId { get; set; } // not in database
     }
 }

@@ -2,8 +2,9 @@
 
 namespace ChatsWebApi.Components.Repositories.Posts
 {
-    public interface IPostRepository : IRepository<Post>
+    public interface IPostsRepository : IRepository<Post>
     {
         public Task<List<Post>> GetPostsByChatIdAsync(int chatId);
+        public Task<int> SetPostsAsDeletedByUserIdAsync(int userId);
     }
 }

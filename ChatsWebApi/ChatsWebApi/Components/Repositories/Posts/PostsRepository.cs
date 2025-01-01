@@ -2,23 +2,30 @@
 using ChatsWebApi.Components.Types;
 using System.Data.SqlClient;
 using Dapper;
+using ChatsWebApi.Components.Repositories.Chats;
 
 namespace ChatsWebApi.Components.Repositories.Posts
 {
-    public class PostsRepository : IPostRepository
+    public class PostsRepository : IPostsRepository
     {
         private readonly string _connStr;
+        private readonly IChatsRepository _chatsRepo;
 
-        public PostsRepository(DBSettings dbSettings)
+        public PostsRepository(DBSettings dbSettings, IChatsRepository chatsRepo)
         {
             _connStr = dbSettings.ConnectionString;
+            _chatsRepo = chatsRepo;
         }
 
         public async Task<int?> CreateAsync(Post item)
         {
             using (var conn = new SqlConnection(_connStr))
             {
-                int result = await conn.QuerySingleAsync<int>("INSERT INTO Posts(Content, IsLast, SenderUserId, ChatId) VALUES(@Content, @IsLast, @SenderUserId, @RecipientUserId, @ChatId);" +
+                List<int> usersId = await _chatsRepo.GetUsersIdByChatIdAsync(item.ChatId);
+                if (!usersId.Contains(item.UserId))
+                    return null;
+
+                int result = await conn.QuerySingleAsync<int>("INSERT INTO Posts(Content, ChatId, UserId) VALUES(@Content, @ChatId, @UserId);" +
                     "SELECT CAST(SCOPE_IDENTITY() as int)", item);
                 return result;
             }
@@ -57,6 +64,20 @@ namespace ChatsWebApi.Components.Repositories.Posts
             {
                 List<Post> posts = (await conn.QueryAsync<Post>("SELECT * FROM Posts WHERE ChatId = @ChatId", new { ChatId = chatId })).ToList();
                 return posts;
+            }
+        }
+
+        public async Task<int> SetPostsAsDeletedByUserIdAsync(int userId)
+        {
+            using (var conn = new SqlConnection(_connStr))
+            {
+                int rowsAffected = await conn.ExecuteAsync("UPDATE Posts SET UserId = @NewUserId WHERE UserId = @OldUserId", new
+                {
+                    NewUserId = -userId,
+                    OldUserId = userId
+                });
+
+                return rowsAffected;
             }
         }
     }

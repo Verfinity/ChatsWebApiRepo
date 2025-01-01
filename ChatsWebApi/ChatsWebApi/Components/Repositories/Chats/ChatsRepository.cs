@@ -2,10 +2,11 @@
 using ChatsWebApi.Components.Types;
 using System.Data.SqlClient;
 using Dapper;
+using System.Runtime.InteropServices;
 
 namespace ChatsWebApi.Components.Repositories.Chats
 {
-    public class ChatsRepository : IChatRepository
+    public class ChatsRepository : IChatsRepository
     {
         private readonly string _connStr;
 
@@ -18,11 +19,46 @@ namespace ChatsWebApi.Components.Repositories.Chats
         {
             using (var conn = new SqlConnection(_connStr))
             {
-                int result = await conn.QuerySingleAsync<int>("INSERT INTO Chats(FirstUserId, SecondUserId) VALUES(@FirstUserId, @SecondUserId);" +
-                    "SELECT CAST(SCOPE_IDENTITY() as int)", item);
-                
-                await conn.ExecuteAsync("INSERT INTO ChatsToUsers(ChatId, UserId) VALUES(@ChatId, @UserId);", new { ChatId = result, UserId = item.FirstUserId });
-                await conn.ExecuteAsync("INSERT INTO ChatsToUsers(ChatId, UserId) VALUES(@ChatId, @UserId);", new { ChatId = result, UserId = item.SecondUserId });
+                if (item.UsersId.Count < 2)
+                    return null;
+
+                List<int> chatsIdWithSameName = (await conn.QueryAsync<int>("SELECT Id FROM Chats WHERE Name = @Name", item)).ToList();
+                item.UsersId.Sort();
+                foreach (int id in chatsIdWithSameName)
+                {
+                    List<int> usersId = await GetUsersIdByChatIdAsync(id);
+                    usersId.Sort();
+
+                    if (usersId.Count != item.UsersId.Count)
+                        break;
+
+                    bool isCompare = true;
+                    for (int i = 0; i < usersId.Count; i++)
+                    {
+                        if (usersId[i] != item.UsersId[i])
+                        {
+                            isCompare = false;
+                            break;
+                        }
+                    }
+                    if (isCompare)
+                        return null;
+                }
+
+                int result = await conn.QuerySingleAsync<int>("INSERT INTO Chats(Name, CountOfMembers) VALUES(@Name, @CountOfMembers);" +
+                    "SELECT CAST(SCOPE_IDENTITY() as int)", new
+                    {
+                        Name = item.Name,
+                        CountOfMembers = item.UsersId.Count
+                    });
+                foreach (int userId in item.UsersId)
+                {
+                    await conn.ExecuteAsync("INSERT INTO ChatsToUsers(ChatId, UserId) VALUES(@ChatId, @UserId)", new
+                    {
+                        ChatId = result,
+                        UserId = userId
+                    });
+                }
 
                 return result;
             }
@@ -44,6 +80,10 @@ namespace ChatsWebApi.Components.Repositories.Chats
             using (var conn = new SqlConnection(_connStr))
             {
                 List<Chat> chats = (await conn.QueryAsync<Chat>("SELECT * FROM Chats;")).ToList();
+                for (int i = 0; i < chats.Count; i++)
+                {
+                    await SetUsersIdInChat(chats[i]);
+                }
                 return chats;
             }
         }
@@ -53,6 +93,7 @@ namespace ChatsWebApi.Components.Repositories.Chats
             using (var conn = new SqlConnection(_connStr))
             {
                 Chat? chat = await conn.QueryFirstOrDefaultAsync<Chat>("SELECT * FROM Chats WHERE Id = @Id;", new { Id = id });
+                await SetUsersIdInChat(chat);
                 return chat;
             }
         }
@@ -77,6 +118,20 @@ namespace ChatsWebApi.Components.Repositories.Chats
 
                 return chats;
             }
+        }
+
+        public async Task<List<int>> GetUsersIdByChatIdAsync(int chatId)
+        {
+            using (var conn = new SqlConnection(_connStr))
+            {
+                List<int> usersId = (await conn.QueryAsync<int>("SELECT UserId FROM ChatsToUsers WHERE ChatId = @Id", new { Id = chatId })).ToList();
+                return usersId;
+            }
+        }
+
+        private async Task SetUsersIdInChat(Chat chat)
+        {
+            chat.UsersId = await GetUsersIdByChatIdAsync(chat.Id);
         }
     }
 }

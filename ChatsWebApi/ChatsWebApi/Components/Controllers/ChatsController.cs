@@ -8,9 +8,9 @@ namespace ChatsWebApi.Components.Controllers
     [Route("api/[controller]")]
     public class ChatsController : ControllerBase
     {
-        private readonly IChatRepository _chatsRepo;
+        private readonly IChatsRepository _chatsRepo;
 
-        public ChatsController(IChatRepository chatsRepo)
+        public ChatsController(IChatsRepository chatsRepo)
         {
             _chatsRepo = chatsRepo;
         }
@@ -31,7 +31,7 @@ namespace ChatsWebApi.Components.Controllers
             int? newChatId = await _chatsRepo.CreateAsync(newChat);
             if (newChatId != null)
                 return Ok(newChatId);
-            return BadRequest();
+            return BadRequest("Chat between this users already exists!");
         }
 
         [HttpDelete]

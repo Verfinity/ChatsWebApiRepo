@@ -1,4 +1,5 @@
-﻿using ChatsWebApi.Components.Settings;
+﻿using ChatsWebApi.Components.Repositories.Posts;
+using ChatsWebApi.Components.Settings;
 using ChatsWebApi.Components.Types;
 using Dapper;
 using System.Data.SqlClient;
@@ -8,9 +9,12 @@ namespace ChatsWebApi.Components.Repositories.Users
     public class UsersRepository : IRepository<User>
     {
         private readonly string _connStr;
-        public UsersRepository(DBSettings dbSettings)
+        private readonly IPostsRepository _postsRepo;
+
+        public UsersRepository(DBSettings dbSettings, IPostsRepository postsRepo)
         {
             _connStr = dbSettings.ConnectionString;
+            _postsRepo = postsRepo;
         }
 
         public async Task<int?> CreateAsync(User item)
@@ -29,6 +33,7 @@ namespace ChatsWebApi.Components.Repositories.Users
 
         public async Task<bool> DeleteAsync(int id)
         {
+            await _postsRepo.SetPostsAsDeletedByUserIdAsync(id);
             using (var conn = new SqlConnection(_connStr))
             {
                 int result = await conn.ExecuteAsync("DELETE FROM Users WHERE Id = @Id;", new { Id = id });

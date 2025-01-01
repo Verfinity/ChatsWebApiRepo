@@ -8,9 +8,9 @@ namespace ChatsWebApi.Components.Controllers
     [Route("api/[controller]")]
     public class PostsController : ControllerBase
     {
-        private readonly IPostRepository _postsRepo;
+        private readonly IPostsRepository _postsRepo;
 
-        public PostsController(IPostRepository postsRepo)
+        public PostsController(IPostsRepository postsRepo)
         {
             _postsRepo = postsRepo;
         }
@@ -31,7 +31,7 @@ namespace ChatsWebApi.Components.Controllers
             int? newPostId = await _postsRepo.CreateAsync(newPost);
             if (newPostId != null)
                 return Ok(newPostId);
-            return BadRequest();
+            return BadRequest("This user isn't in this chat!");
         }
 
         [HttpDelete]

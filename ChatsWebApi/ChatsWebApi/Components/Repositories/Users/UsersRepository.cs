@@ -1,5 +1,4 @@
-﻿using ChatsWebApi.Components.Repositories.Posts;
-using ChatsWebApi.Components.Settings;
+﻿using ChatsWebApi.Components.Settings;
 using ChatsWebApi.Components.Types;
 using Dapper;
 using System.Data.SqlClient;
@@ -9,12 +8,10 @@ namespace ChatsWebApi.Components.Repositories.Users
     public class UsersRepository : IRepository<User>
     {
         private readonly string _connStr;
-        private readonly IPostsRepository _postsRepo;
 
-        public UsersRepository(DBSettings dbSettings, IPostsRepository postsRepo)
+        public UsersRepository(DBSettings dbSettings)
         {
             _connStr = dbSettings.ConnectionString;
-            _postsRepo = postsRepo;
         }
 
         public async Task<int?> CreateAsync(User item)
@@ -25,7 +22,7 @@ namespace ChatsWebApi.Components.Repositories.Users
                 if (usersWithSameNickName.Count > 0)
                     return null;
 
-                int result = await conn.QuerySingleAsync<int>("INSERT INTO Users(FirstName, LastName, NickName) VALUES(@FirstName, @LastName, @NickName);" +
+                int result = await conn.QuerySingleAsync<int>("INSERT INTO Users(FirstName, LastName, NickName, IsDeleted) VALUES(@FirstName, @LastName, @NickName, @IsDeleted);" +
                     "SELECT CAST(SCOPE_IDENTITY() as int)", item);
                 return result;
             }
@@ -33,10 +30,9 @@ namespace ChatsWebApi.Components.Repositories.Users
 
         public async Task<bool> DeleteAsync(int id)
         {
-            await _postsRepo.SetPostsAsDeletedByUserIdAsync(id);
             using (var conn = new SqlConnection(_connStr))
             {
-                int result = await conn.ExecuteAsync("DELETE FROM Users WHERE Id = @Id;", new { Id = id });
+                int result = await conn.ExecuteAsync("UPDATE Users SET FirstName = NULL, LastName = NULL, NickName = NULL, IsDeleted = 1 WHERE Id = @Id", new { Id = id });
                 return result > 0;
             }
         }

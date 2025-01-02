@@ -9,10 +9,12 @@ namespace ChatsWebApi.Components.Repositories.Chats
     public class ChatsRepository : IChatsRepository
     {
         private readonly string _connStr;
+        private readonly IRepository<User> _usersRepo;
 
-        public ChatsRepository(DBSettings dbSettings)
+        public ChatsRepository(DBSettings dbSettings, IRepository<User> usersRepo)
         {
             _connStr = dbSettings.ConnectionString;
+            _usersRepo = usersRepo;
         }
 
         public async Task<int?> CreateAsync(Chat item)
@@ -20,6 +22,18 @@ namespace ChatsWebApi.Components.Repositories.Chats
             using (var conn = new SqlConnection(_connStr))
             {
                 if (item.UsersId.Count < 2)
+                    return null;
+
+                List<User> usersInChat = new List<User>();
+                foreach (int id in item.UsersId)
+                {
+                    User user = await _usersRepo.GetByIdAsync(id);
+                    if (user.IsDeleted)
+                        continue;
+                    usersInChat.Add(user);
+                }
+
+                if (usersInChat.Count < 2)
                     return null;
 
                 List<int> chatsIdWithSameName = (await conn.QueryAsync<int>("SELECT Id FROM Chats WHERE Name = @Name", item)).ToList();

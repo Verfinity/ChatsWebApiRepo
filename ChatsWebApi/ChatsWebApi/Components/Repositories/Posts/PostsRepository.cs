@@ -66,19 +66,5 @@ namespace ChatsWebApi.Components.Repositories.Posts
                 return posts;
             }
         }
-
-        public async Task<int> SetPostsAsDeletedByUserIdAsync(int userId)
-        {
-            using (var conn = new SqlConnection(_connStr))
-            {
-                int rowsAffected = await conn.ExecuteAsync("UPDATE Posts SET UserId = @NewUserId WHERE UserId = @OldUserId", new
-                {
-                    NewUserId = -userId,
-                    OldUserId = userId
-                });
-
-                return rowsAffected;
-            }
-        }
     }
 }

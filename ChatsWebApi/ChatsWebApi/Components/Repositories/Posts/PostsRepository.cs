@@ -1,8 +1,8 @@
 ﻿using ChatsWebApi.Components.Settings;
-using ChatsWebApi.Components.Types;
 using System.Data.SqlClient;
 using Dapper;
 using ChatsWebApi.Components.Repositories.Chats;
+using ChatsWebApi.Components.Types.Database;
 
 namespace ChatsWebApi.Components.Repositories.Posts
 {

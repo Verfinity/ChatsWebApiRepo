@@ -1,4 +1,4 @@
-﻿namespace ChatsWebApi.Components.Types
+﻿namespace ChatsWebApi.Components.Types.Database
 {
     public class Chat
     {

@@ -1,5 +1,5 @@
 ﻿using ChatsWebApi.Components.Repositories.Posts;
-using ChatsWebApi.Components.Types;
+using ChatsWebApi.Components.Types.Database;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ChatsWebApi.Components.Controllers

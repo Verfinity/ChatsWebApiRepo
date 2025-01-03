@@ -1,5 +1,5 @@
 ﻿using ChatsWebApi.Components.Settings;
-using ChatsWebApi.Components.Types;
+using ChatsWebApi.Components.Types.Database;
 using Dapper;
 using System.Data.SqlClient;
 

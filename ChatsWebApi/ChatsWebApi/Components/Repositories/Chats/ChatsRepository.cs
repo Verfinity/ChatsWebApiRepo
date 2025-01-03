@@ -1,8 +1,7 @@
 ﻿using ChatsWebApi.Components.Settings;
-using ChatsWebApi.Components.Types;
 using System.Data.SqlClient;
 using Dapper;
-using System.Runtime.InteropServices;
+using ChatsWebApi.Components.Types.Database;
 
 namespace ChatsWebApi.Components.Repositories.Chats
 {

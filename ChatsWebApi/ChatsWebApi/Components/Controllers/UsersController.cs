@@ -1,11 +1,13 @@
 ﻿using ChatsWebApi.Components.Repositories;
-using ChatsWebApi.Components.Types;
+using ChatsWebApi.Components.Types.Database;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ChatsWebApi.Components.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class UsersController : ControllerBase
     {
         private readonly IRepository<User> _usersRepo;

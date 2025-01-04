@@ -1,11 +1,13 @@
 ﻿using ChatsWebApi.Components.Repositories.Chats;
 using ChatsWebApi.Components.Types.Database;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ChatsWebApi.Components.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class ChatsController : ControllerBase
     {
         private readonly IChatsRepository _chatsRepo;
@@ -36,6 +38,7 @@ namespace ChatsWebApi.Components.Controllers
 
         [HttpDelete]
         [Route("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult> DeleteChatAsync([FromRoute] int id)
         {
             if (await _chatsRepo.DeleteAsync(id))

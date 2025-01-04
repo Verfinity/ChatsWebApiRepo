@@ -2,15 +2,16 @@
 using System.Data.SqlClient;
 using Dapper;
 using ChatsWebApi.Components.Types.Database;
+using ChatsWebApi.Components.Repositories.Users;
 
 namespace ChatsWebApi.Components.Repositories.Chats
 {
     public class ChatsRepository : IChatsRepository
     {
         private readonly string _connStr;
-        private readonly IRepository<User> _usersRepo;
+        private readonly IUsersRepository _usersRepo;
 
-        public ChatsRepository(DBSettings dbSettings, IRepository<User> usersRepo)
+        public ChatsRepository(DBSettings dbSettings, IUsersRepository usersRepo)
         {
             _connStr = dbSettings.ConnectionString;
             _usersRepo = usersRepo;

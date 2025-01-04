@@ -1,4 +1,3 @@
-using ChatsWebApi.Components.Repositories;
 using ChatsWebApi.Components.Repositories.Chats;
 using ChatsWebApi.Components.Repositories.Posts;
 using ChatsWebApi.Components.Repositories.Users;
@@ -48,7 +47,7 @@ namespace ChatsWebApi
             builder.Services.AddSingleton(new DBSettings(connStr));
             builder.Services.AddSingleton(authOptions);
 
-            builder.Services.AddTransient<IRepository<User>, UsersRepository>();
+            builder.Services.AddTransient<IUsersRepository, UsersRepository>();
             builder.Services.AddTransient<IChatsRepository, ChatsRepository>();
             builder.Services.AddTransient<IPostsRepository, PostsRepository>();
 

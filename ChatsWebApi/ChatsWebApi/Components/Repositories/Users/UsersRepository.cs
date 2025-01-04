@@ -5,7 +5,7 @@ using System.Data.SqlClient;
 
 namespace ChatsWebApi.Components.Repositories.Users
 {
-    public class UsersRepository : IRepository<User>
+    public class UsersRepository : IUsersRepository
     {
         private readonly string _connStr;
 
@@ -22,7 +22,7 @@ namespace ChatsWebApi.Components.Repositories.Users
                 if (usersWithSameNickName.Count > 0)
                     return null;
 
-                int result = await conn.QuerySingleAsync<int>("INSERT INTO Users(FirstName, LastName, NickName, IsDeleted) VALUES(@FirstName, @LastName, @NickName, @IsDeleted);" +
+                int result = await conn.QuerySingleAsync<int>("INSERT INTO Users(FirstName, LastName, NickName, Password, RefreshToken, IsDeleted) VALUES(@FirstName, @LastName, @NickName, @Password, @RefreshToken, @IsDeleted);" +
                     "SELECT CAST(SCOPE_IDENTITY() as int)", item);
                 return result;
             }
@@ -32,7 +32,7 @@ namespace ChatsWebApi.Components.Repositories.Users
         {
             using (var conn = new SqlConnection(_connStr))
             {
-                int result = await conn.ExecuteAsync("UPDATE Users SET FirstName = NULL, LastName = NULL, NickName = NULL, IsDeleted = 1 WHERE Id = @Id", new { Id = id });
+                int result = await conn.ExecuteAsync("UPDATE Users SET FirstName = NULL, LastName = NULL, NickName = NULL, Password = NULL, RefreshToken = NULL, IsDeleted = 1 WHERE Id = @Id", new { Id = id });
                 return result > 0;
             }
         }
@@ -52,6 +52,32 @@ namespace ChatsWebApi.Components.Repositories.Users
             {
                 User? user = await conn.QueryFirstOrDefaultAsync<User>("SELECT * FROM Users WHERE Id = @Id;", new { Id = id });
                 return user;
+            }
+        }
+
+        public async Task<User?> IsUserExistAsync(string NickName, string Password)
+        {
+            using (var conn = new SqlConnection(_connStr))
+            {
+                User? user = await conn.QuerySingleAsync<User>("SELECT * FROM Users WHERE NickName = @NickName AND Password = @Password", new
+                {
+                    NickName = NickName,
+                    Password = Password
+                });
+                return user;
+            }
+        }
+
+        public async Task<bool> SetRefreshTokenByNickNameAsync(string refreshToken, string nickName)
+        {
+            using (var conn = new SqlConnection(_connStr))
+            {
+                int result = await conn.ExecuteAsync("UPDATE Users SET RefreshToken = @RefreshToken WHERE NickName = @NickName", new
+                {
+                    RefreshToken = refreshToken,
+                    NickName = nickName
+                });
+                return result > 0;
             }
         }
     }

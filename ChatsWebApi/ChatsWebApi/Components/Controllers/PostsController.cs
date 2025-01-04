@@ -1,11 +1,13 @@
 ﻿using ChatsWebApi.Components.Repositories.Posts;
 using ChatsWebApi.Components.Types.Database;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ChatsWebApi.Components.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class PostsController : ControllerBase
     {
         private readonly IPostsRepository _postsRepo;

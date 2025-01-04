@@ -1,4 +1,5 @@
 ﻿using ChatsWebApi.Components.Repositories;
+using ChatsWebApi.Components.Repositories.Users;
 using ChatsWebApi.Components.Types.Database;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -10,9 +11,9 @@ namespace ChatsWebApi.Components.Controllers
     [Authorize]
     public class UsersController : ControllerBase
     {
-        private readonly IRepository<User> _usersRepo;
+        private readonly IUsersRepository _usersRepo;
 
-        public UsersController(IRepository<User> usersRepo)
+        public UsersController(IUsersRepository usersRepo)
         {
             _usersRepo = usersRepo;
         }
@@ -36,17 +37,9 @@ namespace ChatsWebApi.Components.Controllers
             return NoContent();
         }
 
-        [HttpPost]
-        public async Task<ActionResult<int>> CreateUser([FromBody] User user)
-        {
-            int? newUserId = await _usersRepo.CreateAsync(user);
-            if (newUserId != null)
-                return Ok(newUserId);
-            return BadRequest("This nickname already used");
-        }
-
         [HttpDelete]
         [Route("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult> DeleteUserAsync([FromRoute] int id)
         {
             if (await _usersRepo.DeleteAsync(id))

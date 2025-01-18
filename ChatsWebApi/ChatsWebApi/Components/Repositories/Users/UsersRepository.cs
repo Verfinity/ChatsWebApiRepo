@@ -1,84 +1,69 @@
-﻿using ChatsWebApi.Components.Settings;
-using ChatsWebApi.Components.Types.Database;
-using Dapper;
-using System.Data.SqlClient;
+﻿using ChatsWebApi.Components.Types.Database;
+using Microsoft.EntityFrameworkCore;
 
 namespace ChatsWebApi.Components.Repositories.Users
 {
     public class UsersRepository : IUsersRepository
     {
-        private readonly string _connStr;
+        private readonly AppDBContext _dbContext;
 
-        public UsersRepository(DBSettings dbSettings)
+        public UsersRepository(AppDBContext dbContext)
         {
-            _connStr = dbSettings.ConnectionString;
+            _dbContext = dbContext;
         }
 
-        public async Task<int?> CreateAsync(User item)
+        public async Task<User?> CreateAsync(User item)
         {
-            using (var conn = new SqlConnection(_connStr))
-            {
-                List<User> usersWithSameNickName = (await conn.QueryAsync<User>("SELECT * FROM Users WHERE NickName = @NickName", new { item.NickName })).ToList();
-                if (usersWithSameNickName.Count > 0)
-                    return null;
+            User? userWithSameNickName = await _dbContext.Users.FirstOrDefaultAsync(u => u.NickName == item.NickName);
+            if (userWithSameNickName != null)
+                return null;
 
-                int result = await conn.QuerySingleAsync<int>("INSERT INTO Users(FirstName, LastName, NickName, Password, RefreshToken, IsDeleted) VALUES(@FirstName, @LastName, @NickName, @Password, @RefreshToken, @IsDeleted);" +
-                    "SELECT CAST(SCOPE_IDENTITY() as int)", item);
-                return result;
-            }
+            await _dbContext.Users.AddAsync(item);
+            await _dbContext.SaveChangesAsync();
+            return item;
         }
 
-        public async Task<bool> DeleteAsync(int id)
+        public async Task<bool> DeleteAsync(User user)
         {
-            using (var conn = new SqlConnection(_connStr))
-            {
-                int result = await conn.ExecuteAsync("UPDATE Users SET FirstName = NULL, LastName = NULL, NickName = NULL, Password = NULL, RefreshToken = NULL, IsDeleted = 1 WHERE Id = @Id", new { Id = id });
-                return result > 0;
-            }
+            if (user == null)
+                return false;
+
+            user.FirstName = null;
+            user.LastName = null;
+            user.NickName = null;
+            user.Password = null;
+            user.RefreshToken = null;
+            user.IsDeleted = true;
+            _dbContext.Users.Update(user);
+            await _dbContext.SaveChangesAsync();
+            return true;
         }
 
         public async Task<List<User>> GetAllAsync()
         {
-            using (var conn = new SqlConnection(_connStr))
-            {
-                List<User> users = (await conn.QueryAsync<User>("SELECT * FROM Users;")).ToList();
-                return users;
-            }
+            return await _dbContext.Users.ToListAsync();
         }
 
         public async Task<User?> GetByIdAsync(int id)
         {
-            using (var conn = new SqlConnection(_connStr))
-            {
-                User? user = await conn.QueryFirstOrDefaultAsync<User>("SELECT * FROM Users WHERE Id = @Id;", new { Id = id });
-                return user;
-            }
+            return await _dbContext.Users.FirstOrDefaultAsync(u => u.Id == id);
         }
 
         public async Task<User?> IsUserExistAsync(string NickName, string Password)
         {
-            using (var conn = new SqlConnection(_connStr))
-            {
-                User? user = await conn.QuerySingleAsync<User>("SELECT * FROM Users WHERE NickName = @NickName AND Password = @Password", new
-                {
-                    NickName = NickName,
-                    Password = Password
-                });
-                return user;
-            }
+            return await _dbContext.Users.FirstOrDefaultAsync(u => u.NickName == NickName && u.Password == Password);
         }
 
         public async Task<bool> SetRefreshTokenByNickNameAsync(string refreshToken, string nickName)
         {
-            using (var conn = new SqlConnection(_connStr))
-            {
-                int result = await conn.ExecuteAsync("UPDATE Users SET RefreshToken = @RefreshToken WHERE NickName = @NickName", new
-                {
-                    RefreshToken = refreshToken,
-                    NickName = nickName
-                });
-                return result > 0;
-            }
+            User? user = await _dbContext.Users.FirstOrDefaultAsync(u => u.NickName == nickName);
+            if (user == null) 
+                return false;
+
+            user.RefreshToken = refreshToken;
+            _dbContext.Users.Update(user);
+            await _dbContext.SaveChangesAsync();
+            return true;
         }
     }
 }

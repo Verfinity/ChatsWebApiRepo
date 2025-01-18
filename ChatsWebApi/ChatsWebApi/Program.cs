@@ -42,14 +42,13 @@ namespace ChatsWebApi
                 });
             builder.Services.AddAuthorization();
 
-
-            string? connStr = builder.Configuration.GetConnectionString("Default");
-            builder.Services.AddSingleton(new DBSettings(connStr));
             builder.Services.AddSingleton(authOptions);
 
             builder.Services.AddTransient<IUsersRepository, UsersRepository>();
             builder.Services.AddTransient<IChatsRepository, ChatsRepository>();
             builder.Services.AddTransient<IPostsRepository, PostsRepository>();
+
+            builder.Services.AddDbContext<AppDBContext>();
 
             builder.Services.AddControllers();
 

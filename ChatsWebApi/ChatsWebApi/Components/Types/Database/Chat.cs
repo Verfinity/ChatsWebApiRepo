@@ -1,10 +1,16 @@
-﻿namespace ChatsWebApi.Components.Types.Database
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace ChatsWebApi.Components.Types.Database
 {
+    [Table(name: "Chats")]
     public class Chat
     {
+        [Key]
         public int Id { get; set; }
         public required string Name { get; set; }
-        public int CountOfMembers { get; set; }
-        public required List<int> UsersId { get; set; } // not in database
+        
+        public List<User> Users { get; set; } = new List<User>();
+        public List<Post> Posts { get; set; } = new List<Post>();
     }
 }

@@ -1,70 +1,44 @@
-﻿using ChatsWebApi.Components.Settings;
-using System.Data.SqlClient;
-using Dapper;
-using ChatsWebApi.Components.Repositories.Chats;
-using ChatsWebApi.Components.Types.Database;
+﻿using ChatsWebApi.Components.Types.Database;
+using Microsoft.EntityFrameworkCore;
 
 namespace ChatsWebApi.Components.Repositories.Posts
 {
     public class PostsRepository : IPostsRepository
     {
-        private readonly string _connStr;
-        private readonly IChatsRepository _chatsRepo;
+        private readonly AppDBContext _dbContext;
 
-        public PostsRepository(DBSettings dbSettings, IChatsRepository chatsRepo)
+        public PostsRepository(AppDBContext dbContext)
         {
-            _connStr = dbSettings.ConnectionString;
-            _chatsRepo = chatsRepo;
+            _dbContext = dbContext;
         }
 
-        public async Task<int?> CreateAsync(Post item)
+        public async Task<Post?> CreateAsync(Post item)
         {
-            using (var conn = new SqlConnection(_connStr))
-            {
-                List<int> usersId = await _chatsRepo.GetUsersIdByChatIdAsync(item.ChatId);
-                if (!usersId.Contains(item.UserId))
-                    return null;
-
-                int result = await conn.QuerySingleAsync<int>("INSERT INTO Posts(Content, ChatId, UserId) VALUES(@Content, @ChatId, @UserId);" +
-                    "SELECT CAST(SCOPE_IDENTITY() as int)", item);
-                return result;
-            }
+            if (!item.Chat.Users.Contains(item.User))
+                return null;
+            await _dbContext.Posts.AddAsync(item);
+            await _dbContext.SaveChangesAsync();
+            return item;
         }
 
-        public async Task<bool> DeleteAsync(int id)
+        public async Task<bool> DeleteAsync(Post item)
         {
-            using (var conn = new SqlConnection(_connStr))
-            {
-                int result = await conn.ExecuteAsync("DELETE FROM Posts WHERE Id = @Id;", new { Id = id });
-                return result > 0;
-            }
+            if (item == null)
+                return false;
+
+            _dbContext.Posts.Remove(item);
+            await _dbContext.SaveChangesAsync();
+            return true;
         }
 
         public async Task<List<Post>> GetAllAsync()
         {
-            using (var conn = new SqlConnection(_connStr))
-            {
-                List<Post> posts = (await conn.QueryAsync<Post>("SELECT * FROM Posts;")).ToList();
-                return posts;
-            }
+            return await _dbContext.Posts.ToListAsync();
         }
 
         public async Task<Post?> GetByIdAsync(int id)
         {
-            using (var conn = new SqlConnection(_connStr))
-            {
-                Post? post = await conn.QueryFirstOrDefaultAsync<Post>("SELECT * FROM Posts WHERE Id = @Id;", new { Id = id });
-                return post;
-            }
-        }
-
-        public async Task<List<Post>> GetPostsByChatIdAsync(int chatId)
-        {
-            using (var conn = new SqlConnection(_connStr))
-            {
-                List<Post> posts = (await conn.QueryAsync<Post>("SELECT * FROM Posts WHERE ChatId = @ChatId", new { ChatId = chatId })).ToList();
-                return posts;
-            }
+            return await _dbContext.Posts.FirstOrDefaultAsync(p => p.Id == id);
         }
     }
 }

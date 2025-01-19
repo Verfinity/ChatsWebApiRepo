@@ -1,5 +1,4 @@
-﻿using ChatsWebApi.Components.Repositories;
-using ChatsWebApi.Components.Repositories.Users;
+﻿using ChatsWebApi.Components.Repositories.Users;
 using ChatsWebApi.Components.Types.Database;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -35,6 +34,21 @@ namespace ChatsWebApi.Components.Controllers
             if (user != null)
                 return Ok(user);
             return NoContent();
+        }
+
+        [HttpGet]
+        [Route("{id}/get-chats")]
+        public async Task<ActionResult<List<Chat>>> GetChatsByUserIdAsync([FromRoute] int userId)
+        {
+            User? user = await _usersRepo.GetByIdAsync(userId);
+            if (user == null)
+                return BadRequest("Can't find user with same id");
+
+            List<Chat> chats = user.Chats;
+            if (chats.Count == 0)
+                return NoContent();
+
+            return Ok(chats);
         }
 
         [HttpDelete]

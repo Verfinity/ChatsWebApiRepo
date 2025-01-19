@@ -1,11 +1,5 @@
-﻿using ChatsWebApi.Components.Settings;
-using System.Data.SqlClient;
-using Dapper;
-using ChatsWebApi.Components.Types.Database;
-using ChatsWebApi.Components.Repositories.Users;
-using Microsoft.AspNetCore.Razor.TagHelpers;
+﻿using ChatsWebApi.Components.Types.Database;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 
 namespace ChatsWebApi.Components.Repositories.Chats
 {
@@ -36,12 +30,13 @@ namespace ChatsWebApi.Components.Repositories.Chats
             return item;
         }
 
-        public async Task<bool> DeleteAsync(Chat item)
+        public async Task<bool> DeleteAsync(int id)
         {
-            if (item == null)
+            Chat? chat = await _dbContext.Chats.FirstOrDefaultAsync(c => c.Id == id);
+            if (chat == null)
                 return false;
 
-            _dbContext.Chats.Remove(item);
+            _dbContext.Chats.Remove(chat);
             await _dbContext.SaveChangesAsync();
             return true;
         }

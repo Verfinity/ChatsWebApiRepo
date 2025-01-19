@@ -1,5 +1,4 @@
-﻿using ChatsWebApi.Components.Repositories;
-using ChatsWebApi.Components.Repositories.Users;
+﻿using ChatsWebApi.Components.Repositories.Users;
 using ChatsWebApi.Components.Types.Database;
 using ChatsWebApi.Components.Types.JWT;
 using Microsoft.AspNetCore.Mvc;
@@ -30,8 +29,8 @@ namespace ChatsWebApi.Components.Controllers
             string refreshToken = Guid.NewGuid().ToString();
             user.RefreshToken = refreshToken;
 
-            int? newUserId = await _usersRepo.CreateAsync(user);
-            if (newUserId != null)
+            User? newUser = await _usersRepo.CreateAsync(user);
+            if (newUser != null)
                 return Ok(new TokenPair
                 {
                     AccessToken = await GetJwtToken(user.NickName),

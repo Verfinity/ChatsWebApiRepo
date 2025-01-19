@@ -21,7 +21,7 @@ namespace ChatsWebApi.Components.Controllers
         [Route("{chatId}")]
         public async Task<ActionResult<List<Post>>> GetPostsByChatIdAsync([FromRoute] int chatId)
         {
-            List<Post> posts = await _postsRepo.GetPostsByChatIdAsync(chatId);
+            List<Post> posts = (await _postsRepo.GetAllAsync()).Where(p => p.Chat.Id == chatId).ToList();
             if (posts != null)
                 return Ok(posts);
             return NoContent();
@@ -30,9 +30,9 @@ namespace ChatsWebApi.Components.Controllers
         [HttpPost]
         public async Task<ActionResult> CreateNewPostAsync([FromBody] Post newPost)
         {
-            int? newPostId = await _postsRepo.CreateAsync(newPost);
-            if (newPostId != null)
-                return Ok(newPostId);
+            Post? post = await _postsRepo.CreateAsync(newPost);
+            if (post != null)
+                return Ok();
             return BadRequest("This user isn't in this chat!");
         }
 

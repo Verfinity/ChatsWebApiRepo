@@ -1,10 +1,10 @@
 using ChatsWebApi.Components.Repositories.Chats;
 using ChatsWebApi.Components.Repositories.Posts;
 using ChatsWebApi.Components.Repositories.Users;
-using ChatsWebApi.Components.Settings;
 using ChatsWebApi.Components.Types.Database;
 using ChatsWebApi.Components.Types.JWT;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
 namespace ChatsWebApi
@@ -41,14 +41,17 @@ namespace ChatsWebApi
                     };
                 });
             builder.Services.AddAuthorization();
-
             builder.Services.AddSingleton(authOptions);
+
+            string? connStr = builder.Configuration.GetConnectionString("Default");
+            builder.Services.AddDbContext<AppDBContext>(optionsBuilder =>
+            {
+                optionsBuilder.UseSqlServer(connStr);
+            });
 
             builder.Services.AddTransient<IUsersRepository, UsersRepository>();
             builder.Services.AddTransient<IChatsRepository, ChatsRepository>();
             builder.Services.AddTransient<IPostsRepository, PostsRepository>();
-
-            builder.Services.AddDbContext<AppDBContext>();
 
             builder.Services.AddControllers();
 

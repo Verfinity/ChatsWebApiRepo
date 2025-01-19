@@ -23,8 +23,9 @@ namespace ChatsWebApi.Components.Repositories.Users
             return item;
         }
 
-        public async Task<bool> DeleteAsync(User user)
+        public async Task<bool> DeleteAsync(int id)
         {
+            User? user = await _dbContext.Users.FirstOrDefaultAsync(u => u.Id == id);
             if (user == null)
                 return false;
 

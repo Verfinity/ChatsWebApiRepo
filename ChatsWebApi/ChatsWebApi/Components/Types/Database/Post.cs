@@ -10,12 +10,12 @@ namespace ChatsWebApi.Components.Types.Database
         public int Id { get; set; }
         public required string Content { get; set; }
 
-        public int ChatId { get; set; }
+        public required int ChatId { get; set; }
         [ForeignKey("ChatId")]
-        public required Chat Chat { get; set; }
+        public Chat Chat { get; set; }
 
-        public int UserId { get; set; }
+        public required int UserId { get; set; }
         [ForeignKey("UserId")]
-        public required User User { get; set; }
+        public User User { get; set; }
     }
 }

@@ -22,12 +22,12 @@ namespace ChatsWebApi.Components.Types.Database
 
             modelBuilder
                 .Entity<Post>()
-                .HasOne<User>()
+                .HasOne(p => p.User)
                 .WithMany(u => u.Posts);
 
             modelBuilder
                 .Entity<Post>()
-                .HasOne<Chat>()
+                .HasOne(p => p.Chat)
                 .WithMany(c => c.Posts);
         }
     }

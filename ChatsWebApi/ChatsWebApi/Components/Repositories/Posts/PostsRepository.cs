@@ -21,12 +21,13 @@ namespace ChatsWebApi.Components.Repositories.Posts
             return item;
         }
 
-        public async Task<bool> DeleteAsync(Post item)
+        public async Task<bool> DeleteAsync(int id)
         {
-            if (item == null)
+            Post? post = await _dbContext.Posts.FirstOrDefaultAsync(p => p.Id == id);
+            if (post == null)
                 return false;
 
-            _dbContext.Posts.Remove(item);
+            _dbContext.Posts.Remove(post);
             await _dbContext.SaveChangesAsync();
             return true;
         }

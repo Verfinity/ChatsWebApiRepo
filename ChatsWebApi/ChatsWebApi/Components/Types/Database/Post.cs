@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace ChatsWebApi.Components.Types.Database
 {
@@ -12,10 +13,12 @@ namespace ChatsWebApi.Components.Types.Database
 
         public required int ChatId { get; set; }
         [ForeignKey("ChatId")]
+        [JsonIgnore]
         public Chat Chat { get; set; }
 
         public required int UserId { get; set; }
         [ForeignKey("UserId")]
+        [JsonIgnore]
         public User User { get; set; }
     }
 }

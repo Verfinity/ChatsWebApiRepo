@@ -1,5 +1,7 @@
 ﻿using ChatsWebApi.Components.Types.Database;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Conventions;
+using Microsoft.IdentityModel.Tokens;
 
 namespace ChatsWebApi.Components.Repositories.Chats
 {
@@ -14,6 +16,15 @@ namespace ChatsWebApi.Components.Repositories.Chats
 
         public async Task<Chat?> CreateAsync(Chat item)
         {
+            foreach (int id in item.UsersId)
+            {
+                User? user = (await _dbContext.Users.ToListAsync()).FirstOrDefault(u => u.Id == id);
+                if (user == null)
+                    return null;
+
+                item.Users.Add(user);
+            }
+
             int deletedUsersCount = item.Users.Where(u => u.IsDeleted).Count();
             if (item.Users.Count - deletedUsersCount < 2)
                 return null;

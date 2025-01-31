@@ -37,12 +37,12 @@ namespace ChatsWebApi.Components.Controllers
         }
 
         [HttpGet]
-        [Route("{id}/get-chats")]
+        [Route("{id}/chats")]
         public async Task<ActionResult<List<Chat>>> GetChatsByUserIdAsync([FromRoute] int userId)
         {
             User? user = await _usersRepo.GetByIdAsync(userId);
             if (user == null)
-                return BadRequest("Can't find user with same id");
+                return BadRequest("Can't find user with the same id");
 
             List<Chat> chats = user.Chats;
             if (chats.Count == 0)

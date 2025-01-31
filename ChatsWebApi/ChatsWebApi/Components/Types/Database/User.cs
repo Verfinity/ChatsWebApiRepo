@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace ChatsWebApi.Components.Types.Database
 {
@@ -15,7 +16,9 @@ namespace ChatsWebApi.Components.Types.Database
         public string? RefreshToken { get; set; }
         public bool IsDeleted { get; set; } = false;
 
+        [JsonIgnore]
         public List<Post> Posts { get; set; } = new List<Post>();
+        [JsonIgnore]
         public List<Chat> Chats { get; set; } = new List<Chat>();
     }
 }

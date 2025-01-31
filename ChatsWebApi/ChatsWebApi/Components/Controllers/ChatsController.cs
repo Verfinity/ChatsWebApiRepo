@@ -23,7 +23,7 @@ namespace ChatsWebApi.Components.Controllers
             Chat? chat = await _chatsRepo.CreateAsync(newChat);
             if (chat != null)
                 return Ok(chat);
-            return BadRequest("Chat between this users already exists!");
+            return BadRequest();
         }
 
         [HttpDelete]

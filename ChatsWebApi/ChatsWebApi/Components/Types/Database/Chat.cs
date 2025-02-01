@@ -12,12 +12,11 @@ namespace ChatsWebApi.Components.Types.Database
         public required string Name { get; set; }
 
         [NotMapped]
-        [JsonIgnore]
         public required List<int> UsersId { get; set; } = new List<int>();
 
         [JsonIgnore]
-        public List<User> Users { get; set; } = new List<User>();
+        public virtual List<User> Users { get; set; } = new List<User>();
         [JsonIgnore]
-        public List<Post> Posts { get; set; } = new List<Post>();
+        public virtual List<Post> Posts { get; set; } = new List<Post>();
     }
 }

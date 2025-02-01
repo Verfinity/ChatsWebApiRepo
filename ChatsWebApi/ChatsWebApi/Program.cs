@@ -46,7 +46,7 @@ namespace ChatsWebApi
             string? connStr = builder.Configuration.GetConnectionString("Default");
             builder.Services.AddDbContext<AppDBContext>(optionsBuilder =>
             {
-                optionsBuilder.UseSqlServer(connStr);
+                optionsBuilder.UseLazyLoadingProxies().UseSqlServer(connStr);
             });
 
             builder.Services.AddTransient<IUsersRepository, UsersRepository>();

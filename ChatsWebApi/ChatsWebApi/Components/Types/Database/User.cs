@@ -17,8 +17,8 @@ namespace ChatsWebApi.Components.Types.Database
         public bool IsDeleted { get; set; } = false;
 
         [JsonIgnore]
-        public List<Post> Posts { get; set; } = new List<Post>();
+        public virtual List<Post> Posts { get; set; } = new List<Post>();
         [JsonIgnore]
-        public List<Chat> Chats { get; set; } = new List<Chat>();
+        public virtual List<Chat> Chats { get; set; } = new List<Chat>();
     }
 }

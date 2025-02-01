@@ -14,6 +14,11 @@ namespace ChatsWebApi.Components.Repositories.Posts
 
         public async Task<Post?> CreateAsync(Post item)
         {
+            item.User = await _dbContext.Users.FirstOrDefaultAsync(u => u.Id == item.UserId);
+            item.Chat = await _dbContext.Chats.FirstOrDefaultAsync(c => c.Id == item.ChatId);
+            if (item.User == null || item.Chat == null)
+                return null;
+
             if (!item.Chat.Users.Contains(item.User))
                 return null;
             await _dbContext.Posts.AddAsync(item);

@@ -16,23 +16,29 @@ namespace ChatsWebApi.Components.Repositories.Chats
 
         public async Task<Chat?> CreateAsync(Chat item)
         {
-            foreach (int id in item.UsersId)
-            {
-                User? user = (await _dbContext.Users.ToListAsync()).FirstOrDefault(u => u.Id == id);
-                if (user == null)
-                    return null;
+            item.Users = (await _dbContext.Users.ToListAsync()).Where(u => item.UsersId.Contains(u.Id)).ToList();
 
-                item.Users.Add(user);
-            }
-
-            int deletedUsersCount = item.Users.Where(u => u.IsDeleted).Count();
-            if (item.Users.Count - deletedUsersCount < 2)
+            User? deletedUser = item.Users.FirstOrDefault(u => u.IsDeleted == true);
+            if (deletedUser != null || item.Users.Count() < 2)
                 return null;
 
             List<Chat> chatsWithSameName = (await _dbContext.Chats.ToListAsync()).Where(c => c.Name == item.Name).ToList();
             foreach (Chat chat in chatsWithSameName)
             {
-                if (chat.Users == item.Users)
+                if (item.Users.Count() != chat.Users.Count())
+                    continue;
+
+                bool isCompare = true;
+                for (int i = 0; i < item.Users.Count(); i++)
+                {
+                    if (item.Users[i] != chat.Users[i])
+                    {
+                        isCompare = false;
+                        break;
+                    }
+                }
+
+                if (isCompare)
                     return null;
             }
 
@@ -59,7 +65,12 @@ namespace ChatsWebApi.Components.Repositories.Chats
 
         public async Task<Chat?> GetByIdAsync(int id)
         {
-            return await _dbContext.Chats.FirstOrDefaultAsync(c => c.Id == id);
+            Chat? chat = await _dbContext.Chats.FirstOrDefaultAsync(c => c.Id == id);
+            if (chat == null )
+                return null;
+
+            chat.UsersId = chat.Users.Select(u => u.Id).ToList();
+            return chat;
         }
     }
 }

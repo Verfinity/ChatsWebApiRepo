@@ -23,12 +23,14 @@ namespace ChatsWebApi.Components.Types.Database
             modelBuilder
                 .Entity<Post>()
                 .HasOne(p => p.User)
-                .WithMany(u => u.Posts);
+                .WithMany(u => u.Posts)
+                .HasForeignKey(p => p.UserId);
 
             modelBuilder
                 .Entity<Post>()
                 .HasOne(p => p.Chat)
-                .WithMany(c => c.Posts);
+                .WithMany(c => c.Posts)
+                .HasForeignKey(p => p.ChatId);
         }
     }
 }

@@ -37,8 +37,8 @@ namespace ChatsWebApi.Components.Controllers
         }
 
         [HttpGet]
-        [Route("{id}/chats")]
-        public async Task<ActionResult<List<Chat>>> GetChatsByUserIdAsync([FromRoute] int userId)
+        [Route("get-chats")]
+        public async Task<ActionResult<List<Chat>>> GetChatsByUserIdAsync([FromQuery] int userId)
         {
             User? user = await _usersRepo.GetByIdAsync(userId);
             if (user == null)
@@ -46,7 +46,7 @@ namespace ChatsWebApi.Components.Controllers
 
             List<Chat> chats = user.Chats;
             if (chats.Count == 0)
-                return NoContent();
+                return NoContent(); 
 
             return Ok(chats);
         }

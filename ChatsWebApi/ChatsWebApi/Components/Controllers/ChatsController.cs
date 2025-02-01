@@ -18,12 +18,12 @@ namespace ChatsWebApi.Components.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<int>> CreateNewChatAsync([FromBody] Chat newChat)
+        public async Task<ActionResult<Chat>> CreateNewChatAsync([FromBody] Chat newChat)
         {
             Chat? chat = await _chatsRepo.CreateAsync(newChat);
             if (chat != null)
                 return Ok(chat);
-            return BadRequest();
+            return BadRequest("Can't create chat");
         }
 
         [HttpDelete]

@@ -12,13 +12,11 @@ namespace ChatsWebApi.Components.Types.Database
         public required string Content { get; set; }
 
         public required int ChatId { get; set; }
-        [ForeignKey("ChatId")]
         [JsonIgnore]
-        public Chat Chat { get; set; }
+        public virtual Chat? Chat { get; set; }
 
         public required int UserId { get; set; }
-        [ForeignKey("UserId")]
         [JsonIgnore]
-        public User User { get; set; }
+        public virtual User? User { get; set; }
     }
 }

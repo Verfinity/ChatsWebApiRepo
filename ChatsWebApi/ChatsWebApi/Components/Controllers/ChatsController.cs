@@ -2,6 +2,7 @@
 using ChatsWebApi.Components.Types.Database;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 
 namespace ChatsWebApi.Components.Controllers
 {
@@ -15,6 +16,15 @@ namespace ChatsWebApi.Components.Controllers
         public ChatsController(IChatsRepository chatsRepo)
         {
             _chatsRepo = chatsRepo;
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<List<Chat>>> GetChatsByUserIdAsnync([FromQuery] int userId)
+        {
+            List<Chat> chats = await _chatsRepo.GetChatsByUserIdAsync(userId);
+            if (chats.IsNullOrEmpty())
+                return NoContent();
+            return Ok(chats);
         }
 
         [HttpPost]

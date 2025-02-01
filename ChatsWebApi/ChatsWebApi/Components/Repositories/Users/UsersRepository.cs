@@ -50,14 +50,19 @@ namespace ChatsWebApi.Components.Repositories.Users
             return await _dbContext.Users.FirstOrDefaultAsync(u => u.Id == id);
         }
 
-        public async Task<User?> IsUserExistAsync(string NickName, string Password)
+        public async Task<User?> GetByRefreshTokenAsync(string refreshToken)
+        {
+            return await _dbContext.Users.FirstOrDefaultAsync(u => u.RefreshToken == refreshToken);
+        }
+
+        public async Task<User?> IsExistAsync(string NickName, string Password)
         {
             return await _dbContext.Users.FirstOrDefaultAsync(u => u.NickName == NickName && u.Password == Password);
         }
 
-        public async Task<bool> SetRefreshTokenByNickNameAsync(string refreshToken, string nickName)
+        public async Task<bool> SetRefreshTokenByIdAsync(string refreshToken, int id)
         {
-            User? user = await _dbContext.Users.FirstOrDefaultAsync(u => u.NickName == nickName);
+            User? user = await _dbContext.Users.FirstOrDefaultAsync(u => u.Id == id);
             if (user == null) 
                 return false;
 

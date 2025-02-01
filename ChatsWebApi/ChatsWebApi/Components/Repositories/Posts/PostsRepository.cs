@@ -46,5 +46,10 @@ namespace ChatsWebApi.Components.Repositories.Posts
         {
             return await _dbContext.Posts.FirstOrDefaultAsync(p => p.Id == id);
         }
+
+        public async Task<List<Post>> GetPostsByChatIdAsync(int chatId)
+        {
+            return await _dbContext.Posts.Where(p => p.ChatId == chatId).ToListAsync();
+        }
     }
 }

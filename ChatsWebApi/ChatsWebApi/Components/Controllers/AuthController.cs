@@ -4,7 +4,6 @@ using ChatsWebApi.Components.Types.JWT;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
-using System.Net;
 using System.Security.Claims;
 
 namespace ChatsWebApi.Components.Controllers
@@ -55,7 +54,7 @@ namespace ChatsWebApi.Components.Controllers
         [Route("login")]
         public async Task<ActionResult<TokenPair>> Login([FromBody] LoginContext loginContext)
         {
-            User? user = await _usersRepo.IsUserExistAsync(loginContext.NickName, loginContext.Password);
+            User? user = await _usersRepo.IsExistAsync(loginContext.NickName, loginContext.Password);
             if (user != null)
                 return Ok(new TokenPair
                 {
@@ -69,12 +68,11 @@ namespace ChatsWebApi.Components.Controllers
         [Route("refresh/{refreshToken}")]
         public async Task<ActionResult<TokenPair>> Refresh([FromRoute] string refreshToken)
         {
-            List<User> users = await _usersRepo.GetAllAsync();
-            User? user = users.FirstOrDefault(i => i.RefreshToken == refreshToken);
+            User? user = await _usersRepo.GetByRefreshTokenAsync(refreshToken);
             if (user != null)
             {
                 string newRefreshToken = Guid.NewGuid().ToString();
-                await _usersRepo.SetRefreshTokenByNickNameAsync(newRefreshToken, user.NickName);
+                await _usersRepo.SetRefreshTokenByIdAsync(newRefreshToken, user.Id);
 
                 return Ok(new TokenPair
                 {

@@ -2,6 +2,7 @@
 using ChatsWebApi.Components.Types.Database;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 
 namespace ChatsWebApi.Components.Controllers
 {
@@ -21,9 +22,9 @@ namespace ChatsWebApi.Components.Controllers
         public async Task<ActionResult<List<User>>> GetUsersAsync()
         {
             List<User> users = await _usersRepo.GetAllAsync();
-            if (users != null)
-                return Ok(users);
-            return NoContent();
+            if (users.IsNullOrEmpty())
+                return NoContent();
+            return Ok(users);
         }
 
         [HttpGet]
@@ -34,21 +35,6 @@ namespace ChatsWebApi.Components.Controllers
             if (user != null)
                 return Ok(user);
             return NoContent();
-        }
-
-        [HttpGet]
-        [Route("get-chats")]
-        public async Task<ActionResult<List<Chat>>> GetChatsByUserIdAsync([FromQuery] int userId)
-        {
-            User? user = await _usersRepo.GetByIdAsync(userId);
-            if (user == null)
-                return BadRequest("Can't find user with the same id");
-
-            List<Chat> chats = user.Chats;
-            if (chats.Count == 0)
-                return NoContent(); 
-
-            return Ok(chats);
         }
 
         [HttpDelete]

@@ -1,7 +1,5 @@
 ﻿using ChatsWebApi.Components.Types.Database;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Conventions;
-using Microsoft.IdentityModel.Tokens;
 
 namespace ChatsWebApi.Components.Repositories.Chats
 {
@@ -16,13 +14,13 @@ namespace ChatsWebApi.Components.Repositories.Chats
 
         public async Task<Chat?> CreateAsync(Chat item)
         {
-            item.Users = (await _dbContext.Users.ToListAsync()).Where(u => item.UsersId.Contains(u.Id)).ToList();
+            item.Users = await _dbContext.Users.Where(u => item.UsersId.Contains(u.Id)).ToListAsync();
 
             User? deletedUser = item.Users.FirstOrDefault(u => u.IsDeleted == true);
             if (deletedUser != null || item.Users.Count() < 2)
                 return null;
 
-            List<Chat> chatsWithSameName = (await _dbContext.Chats.ToListAsync()).Where(c => c.Name == item.Name).ToList();
+            List<Chat> chatsWithSameName = await _dbContext.Chats.Where(c => c.Name == item.Name).ToListAsync();
             foreach (Chat chat in chatsWithSameName)
             {
                 if (item.Users.Count() != chat.Users.Count())
@@ -71,6 +69,11 @@ namespace ChatsWebApi.Components.Repositories.Chats
 
             chat.UsersId = chat.Users.Select(u => u.Id).ToList();
             return chat;
+        }
+
+        public async Task<List<Chat>> GetChatsByUserIdAsync(int userId)
+        {
+            return await _dbContext.Chats.Where(c => c.Users.Select(u => u.Id).Contains(userId)).ToListAsync();
         }
     }
 }

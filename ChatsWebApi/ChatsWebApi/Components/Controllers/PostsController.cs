@@ -2,6 +2,7 @@
 using ChatsWebApi.Components.Types.Database;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 
 namespace ChatsWebApi.Components.Controllers
 {
@@ -20,10 +21,10 @@ namespace ChatsWebApi.Components.Controllers
         [HttpGet]
         public async Task<ActionResult<List<Post>>> GetPostsByChatIdAsync([FromQuery] int chatId)
         {
-            List<Post> posts = (await _postsRepo.GetAllAsync()).Where(p => p.Chat.Id == chatId).ToList();
-            if (posts != null)
-                return Ok(posts);
-            return NoContent();
+            List<Post> posts = await _postsRepo.GetPostsByChatIdAsync(chatId);
+            if (posts.IsNullOrEmpty())
+                return NoContent();
+            return Ok(posts);
         }
 
         [HttpPost]

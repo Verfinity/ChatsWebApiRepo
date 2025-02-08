@@ -3,7 +3,7 @@ using System.Text;
 
 namespace ChatsWebApi.Components.Types.JWT
 {
-    public class AuthOptions
+    public class AuthOptions : IAuthOptions
     {
         public required string Issuer { get; init; }
         public required string Audience { get; init; }

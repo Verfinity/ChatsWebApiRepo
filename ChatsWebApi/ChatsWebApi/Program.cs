@@ -3,6 +3,7 @@ using ChatsWebApi.Components.Repositories.Posts;
 using ChatsWebApi.Components.Repositories.Users;
 using ChatsWebApi.Components.Types.Database;
 using ChatsWebApi.Components.Types.JWT;
+using ChatsWebApi.Components.Types.Roles;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -17,7 +18,7 @@ namespace ChatsWebApi
 
             // Add services to the container.
             var authConfigs = builder.Configuration.GetSection("Authentication");
-            AuthOptions authOptions = new AuthOptions
+            IAuthOptions authOptions = new AuthOptions
             {
                 Issuer = authConfigs["Issuer"],
                 Audience = authConfigs["Audience"],
@@ -41,7 +42,14 @@ namespace ChatsWebApi
                     };
                 });
             builder.Services.AddAuthorization();
-            builder.Services.AddSingleton(authOptions);
+            builder.Services.AddSingleton<IAuthOptions>(authOptions);
+
+            List<AdminLog> adminLogsList = builder.Configuration.GetSection("AdminLogs").Get<List<AdminLog>>();
+            IAdminLogs adminLogs = new AdminLogs
+            {
+                AdminLogsList = adminLogsList.ToArray()
+            };
+            builder.Services.AddSingleton<IAdminLogs>(adminLogs);
 
             string? connStr = builder.Configuration.GetConnectionString("Default");
             builder.Services.AddDbContext<AppDBContext>(optionsBuilder =>

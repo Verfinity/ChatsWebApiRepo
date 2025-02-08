@@ -1,6 +1,7 @@
 ﻿using ChatsWebApi.Components.Repositories.Users;
 using ChatsWebApi.Components.Types.Database;
 using ChatsWebApi.Components.Types.JWT;
+using ChatsWebApi.Components.Types.Roles;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -12,29 +13,35 @@ namespace ChatsWebApi.Components.Controllers
     [Route("api/[controller]")]
     public class AuthController : ControllerBase
     {
-        private readonly AuthOptions _authOptions;
+        private readonly IAuthOptions _authOptions;
         private readonly IUsersRepository _usersRepo;
+        private readonly IAdminLogs _adminLogs;
 
-        public AuthController(AuthOptions authOptions, IUsersRepository usersRepo)
+        public AuthController(IAuthOptions authOptions, IUsersRepository usersRepo, IAdminLogs adminLogs)
         {
             _authOptions = authOptions;
             _usersRepo = usersRepo;
+            _adminLogs = adminLogs;
         }
 
         [HttpPost]
         [Route("register")]
         public async Task<ActionResult<TokenPair>> Register([FromBody] User user)
         {
+            SetRole(ref user);
+
             string refreshToken = Guid.NewGuid().ToString();
             user.RefreshToken = refreshToken;
 
             User? newUser = await _usersRepo.CreateAsync(user);
             if (newUser != null)
+            {
                 return Ok(new TokenPair
                 {
-                    AccessToken = await GetJwtToken(user.NickName),
+                    AccessToken = await GetJwtToken(user.NickName, user.Role),
                     RefreshToken = refreshToken
                 });
+            }
             return BadRequest("This nickname already used!");
         }
 
@@ -58,7 +65,7 @@ namespace ChatsWebApi.Components.Controllers
             if (user != null)
                 return Ok(new TokenPair
                 {
-                    AccessToken = await GetJwtToken(user.NickName),
+                    AccessToken = await GetJwtToken(user.NickName, user.Role),
                     RefreshToken = user.RefreshToken
                 });
             return BadRequest("Wrong password or nickname!");
@@ -76,19 +83,32 @@ namespace ChatsWebApi.Components.Controllers
 
                 return Ok(new TokenPair
                 {
-                    AccessToken = await GetJwtToken(user.NickName),
+                    AccessToken = await GetJwtToken(user.NickName, user.Role),
                     RefreshToken = newRefreshToken
                 });
             }
             return BadRequest("Refresh token is invalid!");
         }
 
-        private async Task<string> GetJwtToken(string nickName)
+        private void SetRole(ref User user)
+        {
+            AdminLog adminLog = new AdminLog
+            {
+                NickName = user.NickName,
+                Password = user.Password
+            };
+            Role role = Role.User;
+            if (_adminLogs.IsAdmin(adminLog))
+                role = Role.Admin;
+            user.Role = role.ToString();
+        }
+
+        private async Task<string> GetJwtToken(string nickName, string role)
         {
             var claims = new List<Claim>() 
             { 
                 new Claim(ClaimTypes.Name, nickName),
-                new Claim(ClaimTypes.Role, "User")
+                new Claim(ClaimTypes.Role, role)
             };
             var jwt = new JwtSecurityToken(
                 issuer: _authOptions.Issuer,

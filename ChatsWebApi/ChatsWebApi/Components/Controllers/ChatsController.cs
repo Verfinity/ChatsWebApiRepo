@@ -1,5 +1,6 @@
 ﻿using ChatsWebApi.Components.Repositories.Chats;
 using ChatsWebApi.Components.Types.Database;
+using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -12,10 +13,12 @@ namespace ChatsWebApi.Components.Controllers
     public class ChatsController : ControllerBase
     {
         private readonly IChatsRepository _chatsRepo;
+        private readonly IValidator<Chat> _chatValidator;
 
-        public ChatsController(IChatsRepository chatsRepo)
+        public ChatsController(IChatsRepository chatsRepo, IValidator<Chat> chatValidator)
         {
             _chatsRepo = chatsRepo;
+            _chatValidator = chatValidator;
         }
 
         [HttpGet]
@@ -30,6 +33,8 @@ namespace ChatsWebApi.Components.Controllers
         [HttpPost]
         public async Task<ActionResult<Chat>> CreateNewChatAsync([FromBody] Chat newChat)
         {
+            await _chatValidator.ValidateAndThrowAsync(newChat);
+
             Chat? chat = await _chatsRepo.CreateAsync(newChat);
             if (chat != null)
                 return Ok(chat);

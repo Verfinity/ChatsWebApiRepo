@@ -1,8 +1,10 @@
-﻿namespace ChatsWebApi.Components.Types.Roles
+﻿using ChatsWebApi.Components.Types.JWT;
+
+namespace ChatsWebApi.Components.Types.Roles
 {
     public interface IAdminLogs
     {
-        public AdminLog[] AdminLogsList { get; init; }
-        public bool IsAdmin(AdminLog adminLog);
+        public LoginFields[] AdminLogsList { get; init; }
+        public bool IsAdmin(LoginFields adminLog);
     }
 }

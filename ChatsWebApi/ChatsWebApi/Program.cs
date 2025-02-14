@@ -4,6 +4,8 @@ using ChatsWebApi.Components.Repositories.Users;
 using ChatsWebApi.Components.Types.Database;
 using ChatsWebApi.Components.Types.JWT;
 using ChatsWebApi.Components.Types.Roles;
+using ChatsWebApi.Components.Validators;
+using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -44,7 +46,7 @@ namespace ChatsWebApi
             builder.Services.AddAuthorization();
             builder.Services.AddSingleton<IAuthOptions>(authOptions);
 
-            List<AdminLog> adminLogsList = builder.Configuration.GetSection("AdminLogs").Get<List<AdminLog>>();
+            List<LoginFields> adminLogsList = builder.Configuration.GetSection("AdminLogs").Get<List<LoginFields>>();
             IAdminLogs adminLogs = new AdminLogs
             {
                 AdminLogsList = adminLogsList.ToArray()
@@ -56,6 +58,11 @@ namespace ChatsWebApi
             {
                 optionsBuilder.UseLazyLoadingProxies().UseSqlServer(connStr);
             });
+
+            builder.Services.AddTransient<IValidator<User>, UserValidator>();
+            builder.Services.AddTransient<IValidator<Post>, PostValidator>();
+            builder.Services.AddTransient<IValidator<Chat>, ChatValidator>();
+            builder.Services.AddTransient<IValidator<LoginFields>, LoginFieldsValidator>();
 
             builder.Services.AddTransient<IUsersRepository, UsersRepository>();
             builder.Services.AddTransient<IChatsRepository, ChatsRepository>();

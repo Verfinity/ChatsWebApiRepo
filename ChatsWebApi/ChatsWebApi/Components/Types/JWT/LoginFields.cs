@@ -1,6 +1,6 @@
-﻿namespace ChatsWebApi.Components.Types.Roles
+﻿namespace ChatsWebApi.Components.Types.JWT
 {
-    public class AdminLog
+    public class LoginFields
     {
         public required string NickName { get; set; }
         public required string Password { get; set; }

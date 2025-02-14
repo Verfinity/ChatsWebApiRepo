@@ -36,7 +36,7 @@ namespace ChatsWebApi.Migrations
 
                     b.HasIndex("UsersId");
 
-                    b.ToTable("ChatUser");
+                    b.ToTable("ChatUser", (string)null);
                 });
 
             modelBuilder.Entity("ChatsWebApi.Components.Types.Database.Chat", b =>
@@ -53,7 +53,7 @@ namespace ChatsWebApi.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Chats");
+                    b.ToTable("Chats", (string)null);
                 });
 
             modelBuilder.Entity("ChatsWebApi.Components.Types.Database.Post", b =>
@@ -80,7 +80,7 @@ namespace ChatsWebApi.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Posts");
+                    b.ToTable("Posts", (string)null);
                 });
 
             modelBuilder.Entity("ChatsWebApi.Components.Types.Database.User", b =>
@@ -114,7 +114,7 @@ namespace ChatsWebApi.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("ChatUser", b =>

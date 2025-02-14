@@ -2,6 +2,7 @@
 using ChatsWebApi.Components.Types.Database;
 using ChatsWebApi.Components.Types.JWT;
 using ChatsWebApi.Components.Types.Roles;
+using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -16,18 +17,24 @@ namespace ChatsWebApi.Components.Controllers
         private readonly IAuthOptions _authOptions;
         private readonly IUsersRepository _usersRepo;
         private readonly IAdminLogs _adminLogs;
+        private readonly IValidator<User> _userValidator;
+        private readonly IValidator<LoginFields> _lfValidator;
 
-        public AuthController(IAuthOptions authOptions, IUsersRepository usersRepo, IAdminLogs adminLogs)
+        public AuthController(IAuthOptions authOptions, IUsersRepository usersRepo, IAdminLogs adminLogs, IValidator<User> userValidator, IValidator<LoginFields> lfValidator)
         {
             _authOptions = authOptions;
             _usersRepo = usersRepo;
             _adminLogs = adminLogs;
+            _userValidator = userValidator;
+            _lfValidator = lfValidator;
         }
 
         [HttpPost]
         [Route("register")]
         public async Task<ActionResult<TokenPair>> Register([FromBody] User user)
         {
+            await _userValidator.ValidateAndThrowAsync(user);
+
             SetRole(ref user);
 
             string refreshToken = Guid.NewGuid().ToString();
@@ -45,23 +52,13 @@ namespace ChatsWebApi.Components.Controllers
             return BadRequest("This nickname already used!");
         }
 
-        public record LoginContext
-        {
-            public required string NickName { get; set; }
-            public required string Password { get; set; }
-        };
-
-        public record TokenPair
-        {
-            public required string AccessToken { get; set; }
-            public required string RefreshToken { get; set; }
-        }
-
         [HttpPost]
         [Route("login")]
-        public async Task<ActionResult<TokenPair>> Login([FromBody] LoginContext loginContext)
+        public async Task<ActionResult<TokenPair>> Login([FromBody] LoginFields loginFields)
         {
-            User? user = await _usersRepo.IsExistAsync(loginContext.NickName, loginContext.Password);
+            await _lfValidator.ValidateAndThrowAsync(loginFields);
+
+            User? user = await _usersRepo.IsExistAsync(loginFields.NickName, loginFields.Password);
             if (user != null)
                 return Ok(new TokenPair
                 {
@@ -92,7 +89,7 @@ namespace ChatsWebApi.Components.Controllers
 
         private void SetRole(ref User user)
         {
-            AdminLog adminLog = new AdminLog
+            LoginFields adminLog = new LoginFields
             {
                 NickName = user.NickName,
                 Password = user.Password

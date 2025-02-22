@@ -9,7 +9,6 @@ namespace ChatsWebApi.Components.Types.Database
     {
         [Key]
         public int Id { get; set; }
-        [Length(2, 50)]
         public required string Name { get; set; }
 
         [NotMapped]

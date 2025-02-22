@@ -1,3 +1,4 @@
+using ChatsWebApi.Components.Middlewares;
 using ChatsWebApi.Components.Repositories.Chats;
 using ChatsWebApi.Components.Repositories.Posts;
 using ChatsWebApi.Components.Repositories.Users;
@@ -19,6 +20,8 @@ namespace ChatsWebApi
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
+            builder.Services.AddValidatorsFromAssembly(typeof(Program).Assembly);
+
             var authConfigs = builder.Configuration.GetSection("Authentication");
             IAuthOptions authOptions = new AuthOptions
             {
@@ -59,11 +62,6 @@ namespace ChatsWebApi
                 optionsBuilder.UseLazyLoadingProxies().UseSqlServer(connStr);
             });
 
-            builder.Services.AddTransient<IValidator<User>, UserValidator>();
-            builder.Services.AddTransient<IValidator<Post>, PostValidator>();
-            builder.Services.AddTransient<IValidator<Chat>, ChatValidator>();
-            builder.Services.AddTransient<IValidator<LoginFields>, LoginFieldsValidator>();
-
             builder.Services.AddTransient<IUsersRepository, UsersRepository>();
             builder.Services.AddTransient<IChatsRepository, ChatsRepository>();
             builder.Services.AddTransient<IPostsRepository, PostsRepository>();
@@ -74,6 +72,8 @@ namespace ChatsWebApi
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
+            app.UseMiddleware<ValidationExceptionMiddleware>();
+
             app.UseAuthentication();
             app.UseAuthorization();
 

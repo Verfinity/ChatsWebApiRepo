@@ -9,13 +9,9 @@ namespace ChatsWebApi.Components.Types.Database
     {
         [Key]
         public int Id { get; set; }
-        [Length(2, 50)]
         public required string? FirstName { get; set; }
-        [Length(2, 50)]
         public required string? LastName { get; set; }
-        [Length(2, 50)]
         public required string? NickName { get; set; }
-        [Length(8, 100)]
         public required string? Password { get; set; }
         public string? Role { get; set; }
         public string? RefreshToken { get; set; }

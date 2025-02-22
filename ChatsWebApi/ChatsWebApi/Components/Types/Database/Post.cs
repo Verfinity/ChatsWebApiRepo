@@ -9,7 +9,6 @@ namespace ChatsWebApi.Components.Types.Database
     {
         [Key]
         public int Id { get; set; }
-        [Length(10, 500)]
         public required string Content { get; set; }
 
         public required int ChatId { get; set; }

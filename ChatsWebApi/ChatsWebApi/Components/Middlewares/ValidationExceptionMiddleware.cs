@@ -5,17 +5,17 @@ namespace ChatsWebApi.Components.Middlewares
 {
     public class ValidationExceptionMiddleware
     {
-        private readonly RequestDelegate _requestDelegate;
-        public ValidationExceptionMiddleware(RequestDelegate requestDelegate)
+        private readonly RequestDelegate _next;
+        public ValidationExceptionMiddleware(RequestDelegate next)
         {
-            _requestDelegate = requestDelegate;
+            _next = next;
         }
 
         public async Task InvokeAsync(HttpContext context)
         {
             try
             {
-                await _requestDelegate.Invoke(context);
+                await _next(context);
             }
             catch (ValidationException ex)
             {

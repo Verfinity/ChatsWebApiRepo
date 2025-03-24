@@ -1,0 +1,38 @@
+﻿.chats-container {
+    height: 100vh;
+    width: 20%;
+    border-right: 3px solid grey;
+    padding: 10px;
+}
+
+.messages-container {
+    display: flex;
+    flex-direction: column;
+    width: 80%;
+    padding: 10px;
+}
+
+.chat-container {
+    min-height: 5%;
+    width: 100%;
+    text-align: left;
+    cursor: pointer;
+}
+
+.message-container {
+    align-self: baseline;
+    max-width: 60%;
+    word-break: break-word;
+}
+
+.message-container p {
+    margin: 0;
+}
+
+.author-text {
+    border-bottom: 2px solid darkgreen;
+}
+
+.user-message {
+    align-self: flex-end;
+}

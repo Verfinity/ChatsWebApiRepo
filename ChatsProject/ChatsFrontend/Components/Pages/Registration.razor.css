@@ -1,0 +1,48 @@
+﻿.main-login-container {
+    display: flex;
+    justify-content: center;
+}
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    flex-shrink: 1;
+    align-self: center;
+    height: 30vw;
+    width: 50vw;
+}
+
+.title-text {
+    align-self: center;
+    font-size: 2.5vw;
+    margin: 0;
+}
+
+.field-containers {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    flex-shrink: 1;
+}
+
+.field-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.field-name {
+    font-size: 2vw;
+    margin: 0;
+}
+
+.field-input {
+    background-color: black;
+    border: 2px solid green;
+    width: 100%;
+}
+
+.login-button {
+    font-size: 100%;
+    cursor: pointer;
+}

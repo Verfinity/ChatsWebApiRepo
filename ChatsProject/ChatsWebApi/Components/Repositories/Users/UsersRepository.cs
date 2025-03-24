@@ -28,9 +28,7 @@ namespace ChatsWebApi.Components.Repositories.Users
             User? user = await _dbContext.Users.FirstOrDefaultAsync(u => u.Id == id);
             if (user == null)
                 return false;
-
-            user.FirstName = null;
-            user.LastName = null;
+            
             user.NickName = null;
             user.Password = null;
             user.RefreshToken = null;

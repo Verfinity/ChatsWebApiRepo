@@ -7,9 +7,7 @@ namespace ChatsWebApi.Components.Validators
     {
         public UserValidator()
         {
-            RuleFor(u => u.FirstName).NotNull().Length(2, 50);
-            RuleFor(u => u.LastName).NotNull().Length(2, 50);
-            RuleFor(u => u.NickName).NotNull().Length(2, 50);
+            RuleFor(u => u.NickName).NotNull().Length(1, 50);
             RuleFor(u => u.Password).NotNull().Length(8, 100);
         }
     }

@@ -5,7 +5,6 @@ using ChatsWebApi.Components.Repositories.Users;
 using ChatsWebApi.Components.Types.Database;
 using ChatsWebApi.Components.Types.JWT;
 using ChatsWebApi.Components.Types.Roles;
-using ChatsWebApi.Components.Validators;
 using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;

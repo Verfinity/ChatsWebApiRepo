@@ -17,36 +17,37 @@ namespace ChatsWebApi.Components.Controllers
         private readonly IAuthOptions _authOptions;
         private readonly IUsersRepository _usersRepo;
         private readonly IAdminLogs _adminLogs;
-        private readonly IValidator<User> _userValidator;
         private readonly IValidator<LoginFields> _lfValidator;
 
-        public AuthController(IAuthOptions authOptions, IUsersRepository usersRepo, IAdminLogs adminLogs, IValidator<User> userValidator, IValidator<LoginFields> lfValidator)
+        public AuthController(IAuthOptions authOptions, IUsersRepository usersRepo, IAdminLogs adminLogs, IValidator<LoginFields> lfValidator)
         {
             _authOptions = authOptions;
             _usersRepo = usersRepo;
             _adminLogs = adminLogs;
-            _userValidator = userValidator;
             _lfValidator = lfValidator;
         }
 
         [HttpPost]
         [Route("register")]
-        public async Task<ActionResult<TokenPair>> Register([FromBody] User user)
+        public async Task<ActionResult<TokenPair>> Register([FromBody] LoginFields loginFields)
         {
-            await _userValidator.ValidateAndThrowAsync(user);
+            await _lfValidator.ValidateAndThrowAsync(loginFields);
 
-            SetRole(ref user);
+            var user = new User
+            {
+                NickName = loginFields.NickName,
+                Password = loginFields.Password,
+                Role = GetRole(loginFields).ToString(),
+                RefreshToken = Guid.NewGuid().ToString()
+            };
 
-            string refreshToken = Guid.NewGuid().ToString();
-            user.RefreshToken = refreshToken;
-
-            User? newUser = await _usersRepo.CreateAsync(user);
-            if (newUser != null)
+            user = await _usersRepo.CreateAsync(user);
+            if (user != null)
             {
                 return Ok(new TokenPair
                 {
                     AccessToken = await GetJwtToken(user.NickName, user.Role),
-                    RefreshToken = refreshToken
+                    RefreshToken = user.RefreshToken
                 });
             }
             return BadRequest("This nickname already used!");
@@ -87,17 +88,12 @@ namespace ChatsWebApi.Components.Controllers
             return BadRequest("Refresh token is invalid!");
         }
 
-        private void SetRole(ref User user)
+        private Role GetRole(LoginFields loginFields)
         {
-            LoginFields adminLog = new LoginFields
-            {
-                NickName = user.NickName,
-                Password = user.Password
-            };
-            Role role = Role.User;
-            if (_adminLogs.IsAdmin(adminLog))
+            var role = Role.User;
+            if (_adminLogs.IsAdmin(loginFields))
                 role = Role.Admin;
-            user.Role = role.ToString();
+            return role;
         }
 
         private async Task<string> GetJwtToken(string nickName, string role)

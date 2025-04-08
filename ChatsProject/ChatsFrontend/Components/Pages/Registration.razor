@@ -1,6 +1,4 @@
 ﻿@page "/registration"
-@inject NavigationManager NavigationManager
-@using ChatsWebApi.Components.Types.JWT
 
 <div class="main-container main-login-container">
     <div class="text-container login-form">
@@ -8,44 +6,17 @@
         <div class="field-containers">
             <div class="field-container">
                 <p class="field-name">Логин</p>
-                <input class="field-input" @bind-value=Nickname />
+                <input class="field-input" />
             </div>
             <div class="field-container">
                 <p class="field-name">Пароль</p>
-                <input class="field-input" type="password" @bind-value=Password />
+                <input class="field-input" type="password" />
             </div>
             <div class="field-container">
                 <p class="field-name">Подтверждение пароля</p>
-                <input class="field-input" type="password" @bind-value=DoublePassword />
+                <input class="field-input" type="password" />
             </div>
         </div>
         <button class="text-container login-button">Зарегестрироваться</button>
     </div>
 </div>
-
-
-@code {
-    private readonly string WebApiUrl = "http://localhost:7000";
-    private readonly HttpClient httpClient = new HttpClient();
-
-    private string Nickname = "";
-    private string Password = "";
-    private string DoublePassword = "";
-
-    private async Task RegisterAsync()
-    {
-        if (Password != DoublePassword)
-            return;
-
-        var response = await httpClient.PostAsJsonAsync($"{WebApiUrl}/api/users", new LoginFields
-        {
-            NickName = Nickname,
-            Password = Password
-        });
-
-        if (response.StatusCode == System.Net.HttpStatusCode.OK)
-        {
-            NavigationManager.NavigateTo("");
-        }
-    }
-}

@@ -28,6 +28,19 @@ h1:focus {
     border-color: #929292;
 }
 
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+body {
+    position: relative;
+    overflow-y: hidden;
+}
+
 .main-container {
     display: flex;
     flex-direction: row;

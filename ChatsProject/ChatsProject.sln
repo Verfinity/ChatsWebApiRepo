@@ -5,7 +5,9 @@ VisualStudioVersion = 17.11.35312.102
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChatsWebApi", "ChatsWebApi\ChatsWebApi.csproj", "{6E796D2D-5D6A-4158-BBD0-864D396CE73A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatsFrontend", "ChatsFrontend\ChatsFrontend.csproj", "{1DD53566-478C-4C15-A0FC-8DE14AC26F4C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChatsFrontend", "ChatsFrontend\ChatsFrontend.csproj", "{1DD53566-478C-4C15-A0FC-8DE14AC26F4C}"
+EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{BA212393-AE58-49C0-91ED-7014C6B4DF51}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,8 @@ Global
 		{1DD53566-478C-4C15-A0FC-8DE14AC26F4C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1DD53566-478C-4C15-A0FC-8DE14AC26F4C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1DD53566-478C-4C15-A0FC-8DE14AC26F4C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BA212393-AE58-49C0-91ED-7014C6B4DF51}.Debug|Any CPU.ActiveCfg = Docker|Any CPU
+		{BA212393-AE58-49C0-91ED-7014C6B4DF51}.Release|Any CPU.ActiveCfg = Docker|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

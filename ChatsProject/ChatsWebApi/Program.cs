@@ -55,10 +55,10 @@ namespace ChatsWebApi
             };
             builder.Services.AddSingleton<IAdminLogs>(adminLogs);
 
-            string? connStr = builder.Configuration.GetConnectionString("Default");
+            string? connStr = builder.Configuration.GetConnectionString("Postgres");
             builder.Services.AddDbContext<AppDBContext>(optionsBuilder =>
             {
-                optionsBuilder.UseLazyLoadingProxies().UseSqlServer(connStr);
+                optionsBuilder.UseLazyLoadingProxies().UseNpgsql(connStr);
             });
 
             builder.Services.AddTransient<IUsersRepository, UsersRepository>();
@@ -71,6 +71,8 @@ namespace ChatsWebApi
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
+            app.UseHttpsRedirection();
+
             app.UseMiddleware<ValidationExceptionMiddleware>();
 
             app.UseAuthentication();

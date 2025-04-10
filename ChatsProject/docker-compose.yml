@@ -1,38 +1,13 @@
-version: '3.4'
-
 services:
   chatsfrontend:
     image: ${DOCKER_REGISTRY-}chatsfrontend
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_HTTP_PORTS=8080
-      - ASPNETCORE_HTTPS_PORTS=8081
-    ports:
-      - "5000:8080"
-      - "5001:8081"
     build:
       context: .
       dockerfile: ChatsFrontend/Dockerfile
-    depends_on:
-      - "chatswebapi"
-      
+
   chatswebapi:
     image: ${DOCKER_REGISTRY-}chatswebapi
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_HTTP_PORTS=9090
-      - ASPNETCORE_HTTPS_PORTS=9091
-    ports:
-      - "7000:9090"
-      - "7001:9091"
     build:
       context: .
       dockerfile: ChatsWebApi/Dockerfile
 
-  database:
-    image: "postgres:latest"
-    environment:
-      - POSTGRES_PASSWORD=1234
-      - POSTGRES_DB=ChatsDatabase
-    ports:
-      - "4000:3030"

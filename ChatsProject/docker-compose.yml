@@ -1,13 +1,45 @@
 services:
   chatsfrontend:
     image: ${DOCKER_REGISTRY-}chatsfrontend
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=5000
+      - ASPNETCORE_HTTPS_PORTS=5001
+    ports:
+      - "5000:5000"
+      - "5001:5001"
     build:
       context: .
       dockerfile: ChatsFrontend/Dockerfile
+    networks:
+      - app
 
   chatswebapi:
     image: ${DOCKER_REGISTRY-}chatswebapi
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=7000
+      - ASPNETCORE_HTTPS_PORTS=7001
+    ports:
+      - "7000:7000"
+      - "7001:7001"
     build:
       context: .
       dockerfile: ChatsWebApi/Dockerfile
+    networks:
+      - app
 
+  database:
+    image: postgres:latest
+    environment:
+      - POSTGRES_USER=Root
+      - POSTGRES_PASSWORD=Password
+      - POSTGRES_DB=ChatsDatabase
+    ports:
+      - "8000:8000"
+    networks:
+      - app
+
+networks:
+  app:
+    driver: bridge

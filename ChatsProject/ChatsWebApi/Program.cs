@@ -7,8 +7,10 @@ using ChatsWebApi.Components.Types.JWT;
 using ChatsWebApi.Components.Types.Roles;
 using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using System.Security.Cryptography.X509Certificates;
 
 namespace ChatsWebApi
 {

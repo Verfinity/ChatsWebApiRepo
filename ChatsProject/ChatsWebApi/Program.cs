@@ -7,10 +7,8 @@ using ChatsWebApi.Components.Types.JWT;
 using ChatsWebApi.Components.Types.Roles;
 using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.DataProtection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using System.Security.Cryptography.X509Certificates;
 
 namespace ChatsWebApi
 {
@@ -73,6 +71,13 @@ namespace ChatsWebApi
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
+            using (var scope = app.Services.CreateScope())
+            {
+                var dbContext = scope.ServiceProvider.GetRequiredService<AppDBContext>();
+                if (dbContext.Database.GetMigrations().Count() > 0)
+                    dbContext.Database.Migrate();
+            }
+
             app.UseHttpsRedirection();
 
             app.UseMiddleware<ValidationExceptionMiddleware>();

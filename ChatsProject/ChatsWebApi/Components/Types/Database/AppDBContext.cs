@@ -10,7 +10,6 @@ namespace ChatsWebApi.Components.Types.Database
 
         public AppDBContext(DbContextOptions<AppDBContext> options) : base(options)
         {
-            Database.EnsureCreated();
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

@@ -13,6 +13,8 @@ services:
       dockerfile: ChatsFrontend/Dockerfile
     networks:
       - app
+    depends_on:
+      - chatswebapi
 
   chatswebapi:
     image: ${DOCKER_REGISTRY-}chatswebapi
@@ -28,6 +30,8 @@ services:
       dockerfile: ChatsWebApi/Dockerfile
     networks:
       - app
+    depends_on:
+      - database
 
   database:
     image: postgres:latest

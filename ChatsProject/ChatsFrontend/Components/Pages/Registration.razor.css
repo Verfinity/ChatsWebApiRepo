@@ -7,15 +7,14 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    flex-shrink: 1;
     align-self: center;
-    height: 30vw;
-    width: 50vw;
+    width: 350px;
+    aspect-ratio: 4/3.5;
 }
 
 .title-text {
     align-self: center;
-    font-size: 2.5vw;
+    font-size: 1.2em;
     margin: 0;
 }
 
@@ -23,7 +22,6 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    flex-shrink: 1;
 }
 
 .field-container {
@@ -32,17 +30,21 @@
 }
 
 .field-name {
-    font-size: 2vw;
-    margin: 0;
+    font-size: 1em;
+    margin: 3px;
 }
 
 .field-input {
+    font-size: 0.7em;
     background-color: black;
+    color: lightgreen;
     border: 2px solid green;
-    width: 100%;
 }
 
 .login-button {
-    font-size: 100%;
+    align-self: center;
+    font-size: 0.6em;
     cursor: pointer;
+    width: 50%;
+    aspect-ratio: 1/0.2;
 }

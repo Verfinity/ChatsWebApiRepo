@@ -1,0 +1,188 @@
+[33mcommit 1e62f2d28af8cbbb7ca2630eeb08d4f655a0d8cb[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m)[m
+Author: Verfinity <ilitokarev@gmail.com>
+Date:   Sun Apr 27 11:17:25 2025 +0300
+
+    Added auto migrations
+
+[33mcommit 6581d754783bbfc3bd40ac104e7056d775d48455[m[33m ([m[1;31morigin/main[m[33m)[m
+Author: Verfinity <129280114+Verfinity@users.noreply.github.com>
+Date:   Fri Apr 11 20:57:25 2025 +0300
+
+    Added database container
+
+[33mcommit 6b0787f8056b6a315a2ee73abfe4de1aa965a287[m
+Merge: dcffba7 ff418a0
+Author: Vladislav Chigrinov <37345392+vlad-chigrinov@users.noreply.github.com>
+Date:   Thu Apr 10 20:25:45 2025 +0300
+
+    Merge pull request #1 from vlad-chigrinov/main
+    
+    Fix docker compose
+
+[33mcommit ff418a04b63164b03994929d0a6da36c1f0ca463[m
+Author: FatAlien <vladislav.chigrinov@gmail.com>
+Date:   Thu Apr 10 20:24:52 2025 +0300
+
+    Fix docker compose
+
+[33mcommit dcffba726c912218a76adcbf2783e0c7227a0748[m
+Author: Verfinity <129280114+Verfinity@users.noreply.github.com>
+Date:   Thu Apr 10 13:28:09 2025 +0300
+
+    Added docker compose
+
+[33mcommit b4df733444be08f3f70a7f4c428f195b3929df84[m
+Author: Verfinity <129280114+Verfinity@users.noreply.github.com>
+Date:   Tue Apr 8 21:12:05 2025 +0300
+
+    Fixed frontend
+
+[33mcommit 0f7dd0b21739f098f7676a3d7c531f246bc71b00[m
+Author: Verfinity <129280114+Verfinity@users.noreply.github.com>
+Date:   Mon Apr 7 14:56:09 2025 +0300
+
+    Removed UserValidator and rewrited AuthController
+
+[33mcommit 91f0683a5b59562418bedaa29243b192cb0ecbfd[m
+Author: Verfinity <ilitokarev@gmail.com>
+Date:   Sun Mar 30 13:28:48 2025 +0300
+
+    Update frontend
+
+[33mcommit e042b7996643310fb9e224c21768fd238896066d[m
+Author: Verfinity <ilitokarev@gmail.com>
+Date:   Mon Mar 24 16:51:53 2025 +0300
+
+    RemovedFirstAndLastNameFromUser
+
+[33mcommit aeb46b0e664156e722a131c19601477b64214b4b[m
+Author: Verfinity <ilitokarev@gmail.com>
+Date:   Mon Mar 24 16:37:23 2025 +0300
+
+    Added ChatsFrontend
+
+[33mcommit 844e830f7eca3f554694abef7c243054476dec64[m
+Author: Verfinity <ilitokarev@gmail.com>
+Date:   Mon Mar 24 16:20:35 2025 +0300
+
+    Renamed solution
+
+[33mcommit 000858825e43292bf92dab81485d76d7841054bd[m
+Author: Verfinity <ilitokarev@gmail.com>
+Date:   Mon Mar 24 16:14:41 2025 +0300
+
+    Deleted tests
+
+[33mcommit 32259aa3f56ad51fe0125dacec8cc7dc86ddf22c[m
+Author: Verfinity <129280114+Verfinity@users.noreply.github.com>
+Date:   Sat Feb 22 18:19:12 2025 +0300
+
+    Fixed validators middleware
+
+[33mcommit dbbcf74e859d2ce21f587d9a123e3c3b3f264621[m
+Author: Verfinity <129280114+Verfinity@users.noreply.github.com>
+Date:   Sat Feb 15 17:21:24 2025 +0300
+
+    Added unit tests for UsersController
+
+[33mcommit 3568beabe7842949924e059c947e8ebf9ebc01d6[m
+Author: Verfinity <129280114+Verfinity@users.noreply.github.com>
+Date:   Fri Feb 14 21:26:17 2025 +0300
+
+    Added validators and middleware to them
+
+[33mcommit ad049dcfeb9f4acb5efce7e57fac14aedc97ff08[m
+Author: Verfinity <ilitokarev@gmail.com>
+Date:   Sat Feb 8 13:17:24 2025 +0300
+
+    Added roles
+
+[33mcommit fbcfb316d2a6fc8d695f7d0300f1d21daf37fd65[m
+Author: Verfinity <ilitokarev@gmail.com>
+Date:   Sat Feb 1 20:39:22 2025 +0300
+
+    Added migrations and insomnia json file
+
+[33mcommit ce6d153cdb471b40e2b63eac468dc394fc1af328[m
+Author: Verfinity <ilitokarev@gmail.com>
+Date:   Sat Feb 1 19:49:25 2025 +0300
+
+    Big project refactor
+
+[33mcommit ce947d862ae687466f1381f1e618f00e3fa5d1a8[m
+Author: Verfinity <ilitokarev@gmail.com>
+Date:   Sat Feb 1 13:57:41 2025 +0300
+
+    Added lazyLoading
+
+[33mcommit 4a12106d9368eae2219a147907a23831341b0d63[m
+Author: Verfinity <129280114+Verfinity@users.noreply.github.com>
+Date:   Fri Jan 31 16:32:02 2025 +0300
+
+    Added JSONIgnore to efCore fields
+
+[33mcommit 1dfbfad6d7537f56a38aaf4c4aaacfbfcc02d1b2[m
+Author: Verfinity <129280114+Verfinity@users.noreply.github.com>
+Date:   Sun Jan 19 13:52:39 2025 +0300
+
+    Added db creation
+
+[33mcommit 31b1fa66925cb625887cc5766cb361e23eccf168[m
+Author: Verfinity <129280114+Verfinity@users.noreply.github.com>
+Date:   Sat Jan 18 16:52:55 2025 +0300
+
+    Rewrite repositories to ef core
+
+[33mcommit 00de7133caf1414b6efd456e7d49aba72851b1f8[m
+Author: Verfinity <ilitokarev@gmail.com>
+Date:   Sat Jan 4 18:26:47 2025 +0300
+
+    Added refresh token authorization
+
+[33mcommit 1091efad056163bc181972d8f37873de99e3ca44[m
+Author: Verfinity <ilitokarev@gmail.com>
+Date:   Fri Jan 3 19:49:18 2025 +0300
+
+    Added JWT
+
+[33mcommit 32089e980c312c7a97c3b181bd71fdd02d43b9d4[m
+Author: Verfinity <ilitokarev@gmail.com>
+Date:   Thu Jan 2 14:32:44 2025 +0300
+
+    Added user deletion
+
+[33mcommit ec3d1a286aee1d4d68a8ae928915772323ff6bb7[m
+Author: Verfinity <ilitokarev@gmail.com>
+Date:   Wed Jan 1 19:55:07 2025 +0300
+
+    Ended Chats and Posts Controllers
+
+[33mcommit cc18ebd1f1f9c954a30e931c99c4ce432d218ee7[m
+Author: Verfinity <ilitokarev@gmail.com>
+Date:   Sun Dec 29 17:07:44 2024 +0300
+
+    Edit ChatsRepository
+
+[33mcommit feac0be17c5e65f17196d64c1ff33ce362287444[m
+Author: Verfinity <ilitokarev@gmail.com>
+Date:   Fri Dec 27 19:40:30 2024 +0300
+
+    Added Posts and Chats Controllers
+
+[33mcommit 8cec06823abe287b258afeb2c4cf673aec081571[m
+Author: Verfinity <ilitokarev@gmail.com>
+Date:   Thu Dec 26 20:10:38 2024 +0300
+
+    Added MessangerController
+
+[33mcommit b950f76e4d66d925eb5ccc30a576476156a566cb[m
+Author: Verfinity <ilitokarev@gmail.com>
+Date:   Thu Dec 26 16:45:07 2024 +0300
+
+    First commit
+
+[33mcommit 6ac726eaa5dac70066d29fe14251fd10ef410a31[m
+Author: Verfinity <129280114+Verfinity@users.noreply.github.com>
+Date:   Thu Dec 26 16:34:55 2024 +0300
+
+    Initial commit

@@ -5,11 +5,41 @@
     padding: 10px;
 }
 
+.chat-data-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 80%;
+    padding: 10px;
+}
+
 .messages-container {
     display: flex;
     flex-direction: column;
-    width: 80%;
-    padding: 10px;
+    width: 100%;
+    height: 100%;
+    overflow: scroll;
+    overflow-x: hidden;
+}
+
+.input-message-container {
+    display: flex;
+    height: 30px;
+}
+
+.field-input {
+    font-size: 1em;
+    background-color: black;
+    color: lightgreen;
+    border: 2px solid green;
+    border-radius: 10px;
+    width: 100%;
+}
+
+.input-message-container button {
+    font-size: 1.2em;
+    cursor: pointer;
+    margin: 0;
 }
 
 .chat-container {

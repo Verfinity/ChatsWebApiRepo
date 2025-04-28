@@ -1,5 +1,6 @@
 ﻿using ChatsWebApi.Components.Repositories.Users;
 using ChatsWebApi.Components.Types.Database;
+using ChatsWebApi.Components.Types.Roles;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;

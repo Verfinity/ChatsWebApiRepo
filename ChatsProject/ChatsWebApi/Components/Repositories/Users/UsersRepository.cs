@@ -28,12 +28,9 @@ namespace ChatsWebApi.Components.Repositories.Users
             User? user = await _dbContext.Users.FirstOrDefaultAsync(u => u.Id == id);
             if (user == null)
                 return false;
-            
-            user.NickName = null;
-            user.Password = null;
-            user.RefreshToken = null;
+
             user.IsDeleted = true;
-            _dbContext.Users.Update(user);
+            await _dbContext.Users.AddAsync(user);
             await _dbContext.SaveChangesAsync();
             return true;
         }

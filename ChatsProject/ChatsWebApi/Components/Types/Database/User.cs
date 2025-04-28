@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using ChatsWebApi.Components.Types.Roles;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 
@@ -9,10 +10,10 @@ namespace ChatsWebApi.Components.Types.Database
     {
         [Key]
         public int Id { get; set; }
-        public required string? NickName { get; set; }
-        public required string? Password { get; set; }
-        public string? Role { get; set; }
-        public string? RefreshToken { get; set; }
+        public required string NickName { get; set; }
+        public required string Password { get; set; }
+        public required Role Role { get; set; }
+        public required string RefreshToken { get; set; }
         public bool IsDeleted { get; set; } = false;
 
         [JsonIgnore]

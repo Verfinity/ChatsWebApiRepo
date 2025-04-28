@@ -14,7 +14,7 @@ namespace ChatsWebApi
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
@@ -49,11 +49,6 @@ namespace ChatsWebApi
             builder.Services.AddSingleton<IAuthOptions>(authOptions);
 
             List<LoginFields> adminLogsList = builder.Configuration.GetSection("AdminLogs").Get<List<LoginFields>>();
-            IAdminLogs adminLogs = new AdminLogs
-            {
-                AdminLogsList = adminLogsList.ToArray()
-            };
-            builder.Services.AddSingleton<IAdminLogs>(adminLogs);
 
             string? connStr = builder.Configuration.GetConnectionString("Postgres");
             builder.Services.AddDbContext<AppDBContext>(optionsBuilder =>
@@ -75,7 +70,20 @@ namespace ChatsWebApi
             {
                 var dbContext = scope.ServiceProvider.GetRequiredService<AppDBContext>();
                 if (dbContext.Database.GetMigrations().Count() > 0)
-                    dbContext.Database.Migrate();
+                    await dbContext.Database.MigrateAsync();
+
+                var usersRepo = scope.ServiceProvider.GetRequiredService<IUsersRepository>();
+                foreach (var adminLog in adminLogsList)
+                {
+                    var admin = new User
+                    {
+                        NickName = adminLog.NickName,
+                        Password = adminLog.Password,
+                        Role = Role.Admin,
+                        RefreshToken = Guid.NewGuid().ToString()
+                    };
+                    await usersRepo.CreateAsync(admin);
+                }
             }
 
             app.UseHttpsRedirection();

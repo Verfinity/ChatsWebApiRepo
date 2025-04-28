@@ -16,14 +16,12 @@ namespace ChatsWebApi.Components.Controllers
     {
         private readonly IAuthOptions _authOptions;
         private readonly IUsersRepository _usersRepo;
-        private readonly IAdminLogs _adminLogs;
         private readonly IValidator<LoginFields> _lfValidator;
 
-        public AuthController(IAuthOptions authOptions, IUsersRepository usersRepo, IAdminLogs adminLogs, IValidator<LoginFields> lfValidator)
+        public AuthController(IAuthOptions authOptions, IUsersRepository usersRepo, IValidator<LoginFields> lfValidator)
         {
             _authOptions = authOptions;
             _usersRepo = usersRepo;
-            _adminLogs = adminLogs;
             _lfValidator = lfValidator;
         }
 
@@ -37,7 +35,7 @@ namespace ChatsWebApi.Components.Controllers
             {
                 NickName = loginFields.NickName,
                 Password = loginFields.Password,
-                Role = GetRole(loginFields).ToString(),
+                Role = Role.User,
                 RefreshToken = Guid.NewGuid().ToString()
             };
 
@@ -88,26 +86,18 @@ namespace ChatsWebApi.Components.Controllers
             return BadRequest("Refresh token is invalid!");
         }
 
-        private Role GetRole(LoginFields loginFields)
-        {
-            var role = Role.User;
-            if (_adminLogs.IsAdmin(loginFields))
-                role = Role.Admin;
-            return role;
-        }
-
-        private async Task<string> GetJwtToken(string nickName, string role)
+        private async Task<string> GetJwtToken(string nickName, Role role)
         {
             var claims = new List<Claim>() 
             { 
                 new Claim(ClaimTypes.Name, nickName),
-                new Claim(ClaimTypes.Role, role)
+                new Claim(ClaimTypes.Role, role.ToString())
             };
             var jwt = new JwtSecurityToken(
                 issuer: _authOptions.Issuer,
                 audience: _authOptions.Audience,
                 claims: claims,
-                expires: DateTime.UtcNow.Add(TimeSpan.FromMinutes(2)),
+                expires: DateTime.UtcNow.Add(TimeSpan.FromMinutes(5)),
                 signingCredentials: new SigningCredentials(_authOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256)
                 );
 

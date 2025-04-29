@@ -7,5 +7,6 @@ namespace ChatsWebApi.Components.Repositories.Users
         public Task<User?> IsExistAsync(string NickName, string Password);
         public Task<User?> GetByRefreshTokenAsync(string refreshToken);
         public Task<bool> SetRefreshTokenByIdAsync(string refreshToken, int id);
+        public Task<bool> AddUserToChatAsync(int chatId, int userId);
     }
 }

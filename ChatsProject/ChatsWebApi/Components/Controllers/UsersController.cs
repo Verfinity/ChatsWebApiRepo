@@ -19,6 +19,15 @@ namespace ChatsWebApi.Components.Controllers
             _usersRepo = usersRepo;
         }
 
+        [HttpPost]
+        [Route("add-user-to-chat")]
+        public async Task<ActionResult> AddUserToChat([FromBody] ChatsToUsers chatsToUsers)
+        {
+            if (await _usersRepo.AddUserToChatAsync(chatsToUsers.ChatId, chatsToUsers.UserId))
+                return Ok();
+            return BadRequest("Incorrect ChatId or UserId");
+        }
+
         [HttpGet]
         public async Task<ActionResult<List<User>>> GetUsersAsync()
         {

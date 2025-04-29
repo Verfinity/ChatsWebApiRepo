@@ -14,7 +14,6 @@ namespace ChatsWebApi.Components.Types.Database
         public required string Password { get; set; }
         public required Role Role { get; set; }
         public required string RefreshToken { get; set; }
-        public bool IsDeleted { get; set; } = false;
 
         [JsonIgnore]
         public virtual List<Post> Posts { get; set; } = new List<Post>();

@@ -10,9 +10,7 @@ namespace ChatsWebApi.Components.Types.Database
         [Key]
         public int Id { get; set; }
         public required string Name { get; set; }
-
-        [NotMapped]
-        public required List<int> UsersId { get; set; } = new List<int>();
+        public string Description { get; set; } = string.Empty;
 
         [JsonIgnore]
         public virtual List<User> Users { get; set; } = new List<User>();

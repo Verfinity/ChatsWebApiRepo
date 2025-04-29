@@ -29,8 +29,7 @@ namespace ChatsWebApi.Components.Repositories.Users
             if (user == null)
                 return false;
 
-            user.IsDeleted = true;
-            await _dbContext.Users.AddAsync(user);
+            _dbContext.Users.Remove(user);
             await _dbContext.SaveChangesAsync();
             return true;
         }
@@ -63,6 +62,18 @@ namespace ChatsWebApi.Components.Repositories.Users
 
             user.RefreshToken = refreshToken;
             _dbContext.Users.Update(user);
+            await _dbContext.SaveChangesAsync();
+            return true;
+        }
+
+        public async Task<bool> AddUserToChatAsync(int chatId, int userId)
+        {
+            var chat = await _dbContext.Chats.FirstOrDefaultAsync(c => c.Id == chatId);
+            var user = await _dbContext.Users.FirstOrDefaultAsync(u => u.Id == userId);
+            if (chat == null || user == null)
+                return false;
+
+            user.Chats.Add(chat);
             await _dbContext.SaveChangesAsync();
             return true;
         }

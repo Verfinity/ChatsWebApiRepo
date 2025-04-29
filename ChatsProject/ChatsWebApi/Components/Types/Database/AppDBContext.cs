@@ -18,7 +18,8 @@ namespace ChatsWebApi.Components.Types.Database
             modelBuilder
                 .Entity<Chat>()
                 .HasMany(u => u.Users)
-                .WithMany(c => c.Chats);
+                .WithMany(c => c.Chats)
+                .UsingEntity<ChatsToUsers>();
 
             modelBuilder
                 .Entity<Post>()

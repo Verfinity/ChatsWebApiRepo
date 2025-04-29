@@ -14,31 +14,9 @@ namespace ChatsWebApi.Components.Repositories.Chats
 
         public async Task<Chat?> CreateAsync(Chat item)
         {
-            item.Users = await _dbContext.Users.Where(u => item.UsersId.Contains(u.Id)).ToListAsync();
-
-            User? deletedUser = item.Users.FirstOrDefault(u => u.IsDeleted == true);
-            if (deletedUser != null || item.Users.Count() < 2)
+            var chatWithSameName = await _dbContext.Chats.FirstOrDefaultAsync(c => c.Name.ToLower() == item.Name.ToLower());
+            if (chatWithSameName != null)
                 return null;
-
-            List<Chat> chatsWithSameName = await _dbContext.Chats.Where(c => c.Name == item.Name).ToListAsync();
-            foreach (Chat chat in chatsWithSameName)
-            {
-                if (item.Users.Count() != chat.Users.Count())
-                    continue;
-
-                bool isCompare = true;
-                for (int i = 0; i < item.Users.Count(); i++)
-                {
-                    if (item.Users[i] != chat.Users[i])
-                    {
-                        isCompare = false;
-                        break;
-                    }
-                }
-
-                if (isCompare)
-                    return null;
-            }
 
             await _dbContext.Chats.AddAsync(item);
             await _dbContext.SaveChangesAsync();
@@ -67,7 +45,6 @@ namespace ChatsWebApi.Components.Repositories.Chats
             if (chat == null )
                 return null;
 
-            chat.UsersId = chat.Users.Select(u => u.Id).ToList();
             return chat;
         }
 

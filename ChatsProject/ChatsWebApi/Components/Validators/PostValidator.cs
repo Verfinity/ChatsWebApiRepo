@@ -7,9 +7,9 @@ namespace ChatsWebApi.Components.Validators
     {
         public PostValidator()
         {
-            RuleFor(p => p.Content).NotNull().Length(10, 500);
-            RuleFor(p => p.ChatId).NotNull();
-            RuleFor(p => p.UserId).NotNull();
+            RuleFor(p => p.Content).NotNull().NotEmpty();
+            RuleFor(p => p.ChatId).NotNull().NotEmpty();
+            RuleFor(p => p.UserId).NotNull().NotEmpty();
         }
     }
 }

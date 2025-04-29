@@ -1,6 +1,7 @@
 ﻿using ChatsWebApi.Components.Repositories.Users;
 using ChatsWebApi.Components.Types.Database;
 using ChatsWebApi.Components.Types.Roles;
+using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -13,17 +14,32 @@ namespace ChatsWebApi.Components.Controllers
     public class UsersController : ControllerBase
     {
         private readonly IUsersRepository _usersRepo;
+        private readonly IValidator<ChatsToUsers> _chatsToUsersValidator;
 
-        public UsersController(IUsersRepository usersRepo)
+        public UsersController(IUsersRepository usersRepo, IValidator<ChatsToUsers> chatsToUsersValidator)
         {
             _usersRepo = usersRepo;
+            _chatsToUsersValidator = chatsToUsersValidator;
         }
 
         [HttpPost]
         [Route("add-user-to-chat")]
         public async Task<ActionResult> AddUserToChat([FromBody] ChatsToUsers chatsToUsers)
         {
+            await _chatsToUsersValidator.ValidateAndThrowAsync(chatsToUsers);
+
             if (await _usersRepo.AddUserToChatAsync(chatsToUsers.ChatId, chatsToUsers.UserId))
+                return Ok();
+            return BadRequest("Incorrect ChatId or UserId");
+        }
+
+        [HttpPost]
+        [Route("remove-user-from-chat")]
+        public async Task<ActionResult> RemoveUserFromChat([FromBody] ChatsToUsers chatsToUsers)
+        {
+            await _chatsToUsersValidator.ValidateAndThrowAsync(chatsToUsers);
+
+            if (await _usersRepo.RemoveUserFromChatAsync(chatsToUsers.ChatId, chatsToUsers.UserId))
                 return Ok();
             return BadRequest("Incorrect ChatId or UserId");
         }
@@ -54,7 +70,7 @@ namespace ChatsWebApi.Components.Controllers
         {
             if (await _usersRepo.DeleteAsync(id))
                 return Ok();
-            return BadRequest();
+            return BadRequest("User with this id doesn't exists!");
         }
     }
 }

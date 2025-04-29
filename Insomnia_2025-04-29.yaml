@@ -1,0 +1,338 @@
+type: collection.insomnia.rest/5.0
+name: Chats
+meta:
+  id: wrk_58488cc643a74a09afa9e79f5b5ac32b
+  created: 1734792296281
+  modified: 1734792296281
+collection:
+  - name: Users
+    meta:
+      id: fld_60697a4c3e0345e580f073779105e273
+      created: 1738339563335
+      modified: 1738339563335
+      sortKey: -1738339563335
+    children:
+      - url: https://localhost:7001/api/users/
+        name: GetAllUsers
+        meta:
+          id: req_01af3c35dafe425eb528628ce43e308d
+          created: 1738339660509
+          modified: 1745934412429
+          isPrivate: false
+          sortKey: -1738339660509
+        method: GET
+        headers:
+          - name: User-Agent
+            value: insomnia/10.3.0
+        authentication:
+          type: bearer
+          token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiQWRtaW4iLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJBZG1pbiIsImV4cCI6MTc0NTkzNDY4MiwiaXNzIjoid2ViLWFwaSIsImF1ZCI6ImNsaWVudCJ9.jJiDRTT2CerNsUWaR2GrB0TiMnl7pchhB0VQXI4LLCk
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: https://localhost:7001/api/users/2
+        name: GetUserById
+        meta:
+          id: req_f5e09b110c9546b3a912b3f857c4fbd1
+          created: 1738340672075
+          modified: 1745933518233
+          isPrivate: false
+          sortKey: -1738340672075
+        method: GET
+        headers:
+          - name: User-Agent
+            value: insomnia/10.3.0
+        authentication:
+          type: bearer
+          token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiQyIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IlVzZXIiLCJleHAiOjE3MzgzNDI2OTEsImlzcyI6IndlYi1hcGkiLCJhdWQiOiJjbGllbnQifQ.xZGBogHW5QZ0-IxZeaIAdh0jISb2OSIyVUtyXl5T7ls
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: https://localhost:7001/api/users/add-user-to-chat
+        name: AddUserToChat
+        meta:
+          id: req_52571128a1d44dab95da516f3cdf91c4
+          created: 1745933330756
+          modified: 1745934742540
+          isPrivate: false
+          sortKey: -1745933330756
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+            	"ChatId": "2",
+            	"UserId": "3"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/10.3.0
+        authentication:
+          type: bearer
+          token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiQWRtaW4iLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJBZG1pbiIsImV4cCI6MTc0NTkzNDg2MCwiaXNzIjoid2ViLWFwaSIsImF1ZCI6ImNsaWVudCJ9.oMpTMX36TBHIOJBhzWaoAqsvYfXVYkh7rlae3aYNZ4U
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+  - name: Auth
+    meta:
+      id: fld_56d729f388544a7881aec4ca51432234
+      created: 1738339684163
+      modified: 1738339684163
+      sortKey: -1738339684163
+    children:
+      - url: https://localhost:7001/api/auth/register
+        name: Register
+        meta:
+          id: req_ca529a1fa78e4671b70c5fad1baffc6a
+          created: 1738339688092
+          modified: 1745934448768
+          isPrivate: false
+          sortKey: -1738339688092
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+            	"NickName": "SecondUser",
+            	"Password": "12345678"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/10.3.0
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: https://localhost:7001/api/auth/refresh/b8137926-04e2-4ae5-8716-22f853dc7abb
+        name: Refresh
+        meta:
+          id: req_def5b65340454178bd222f59a3a1dce4
+          created: 1738340282735
+          modified: 1745934558502
+          isPrivate: false
+          sortKey: -1738340282735
+        method: GET
+        headers:
+          - name: User-Agent
+            value: insomnia/10.3.0
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: https://localhost:7001/api/auth/login
+        name: Login
+        meta:
+          id: req_c01c045ff76f4e76a7586098ee335bd4
+          created: 1745934256581
+          modified: 1745934405191
+          isPrivate: false
+          sortKey: -1745934256581
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+            	"NickName": "Admin",
+            	"Password": "0987654321"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/11.0.2
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+  - name: Chats
+    meta:
+      id: fld_fa3efaaacdea4306b9e310bf84e5dc95
+      created: 1738340357587
+      modified: 1738340357587
+      sortKey: -1738340357587
+    children:
+      - url: https://localhost:7001/api/chats
+        name: CreateNewChat
+        meta:
+          id: req_c496a09c60a64a6fa2d8481b0fb5afbb
+          created: 1738340360665
+          modified: 1745934725783
+          isPrivate: false
+          sortKey: -1738340360665
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+            	"Name": "SecondChat",
+            	"Description": "Just a simple chat"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/10.3.0
+        authentication:
+          type: bearer
+          token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiQWRtaW4iLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJBZG1pbiIsImV4cCI6MTc0NTkzNDg2MCwiaXNzIjoid2ViLWFwaSIsImF1ZCI6ImNsaWVudCJ9.oMpTMX36TBHIOJBhzWaoAqsvYfXVYkh7rlae3aYNZ4U
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: http://localhost:7000/api/chats/1
+        name: DeleteChatById
+        meta:
+          id: req_f75a87712153422683c0345c5933dd8c
+          created: 1738344318013
+          modified: 1745933910531
+          isPrivate: false
+          sortKey: -1738344318013
+        method: DELETE
+        headers:
+          - name: User-Agent
+            value: insomnia/10.3.0
+        authentication:
+          type: bearer
+          token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiQyIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IlVzZXIiLCJleHAiOjE3MzgzNDQwNjgsImlzcyI6IndlYi1hcGkiLCJhdWQiOiJjbGllbnQifQ.SFLQUK09U9hgXJ_jmtqMnlkfcMBpq33kSs4ID72bTHk
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: https://localhost:7001/api/chats/?userId=3
+        name: GetChatsByUserId
+        meta:
+          id: req_9bd3bc099ecd42a88f61aff121b0196d
+          created: 1745933914059
+          modified: 1745934616536
+          isPrivate: false
+          sortKey: -1745933914059
+        method: GET
+        headers:
+          - name: User-Agent
+            value: insomnia/11.0.2
+        authentication:
+          type: bearer
+          token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiQWRtaW4iLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJBZG1pbiIsImV4cCI6MTc0NTkzNDg2MCwiaXNzIjoid2ViLWFwaSIsImF1ZCI6ImNsaWVudCJ9.oMpTMX36TBHIOJBhzWaoAqsvYfXVYkh7rlae3aYNZ4U
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+  - name: Posts
+    meta:
+      id: fld_2918da14f77148e6b78b6d0b7f99cf39
+      created: 1738342714404
+      modified: 1738342714404
+      sortKey: -1738342714404
+    children:
+      - url: https://localhost:7001/api/posts
+        name: CreateNewPost
+        meta:
+          id: req_f25375682e734053b65af9b89b081d6c
+          created: 1738342723784
+          modified: 1745934866312
+          isPrivate: false
+          sortKey: -1738342723784
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+            	"Content": "Helloasdnkandkjasndkjankdjnsa",
+            	"ChatId": 1,
+            	"UserId": 3
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/10.3.0
+        authentication:
+          type: bearer
+          token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiQWRtaW4iLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJBZG1pbiIsImV4cCI6MTc0NTkzNDY4MiwiaXNzIjoid2ViLWFwaSIsImF1ZCI6ImNsaWVudCJ9.jJiDRTT2CerNsUWaR2GrB0TiMnl7pchhB0VQXI4LLCk
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: https://localhost:7001/api/posts/?chatId=1
+        name: GetPostByChatId
+        meta:
+          id: req_5921edf55c034529880736f756b740c5
+          created: 1745934879120
+          modified: 1745934924739
+          isPrivate: false
+          sortKey: -1745934879120
+        method: GET
+        headers:
+          - name: User-Agent
+            value: insomnia/11.0.2
+        authentication:
+          type: bearer
+          token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiQWRtaW4iLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJBZG1pbiIsImV4cCI6MTc0NTkzNDY4MiwiaXNzIjoid2ViLWFwaSIsImF1ZCI6ImNsaWVudCJ9.jJiDRTT2CerNsUWaR2GrB0TiMnl7pchhB0VQXI4LLCk
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+cookieJar:
+  name: Default Jar
+  meta:
+    id: jar_62d07281317daee5702dc2306de51e50907cef64
+    created: 1734792296294
+    modified: 1734792296294
+environments:
+  name: Base Environment
+  meta:
+    id: env_62d07281317daee5702dc2306de51e50907cef64
+    created: 1734792296291
+    modified: 1734792296291
+    isPrivate: false

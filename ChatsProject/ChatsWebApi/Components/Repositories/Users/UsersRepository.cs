@@ -77,5 +77,17 @@ namespace ChatsWebApi.Components.Repositories.Users
             await _dbContext.SaveChangesAsync();
             return true;
         }
+
+        public async Task<bool> RemoveUserFromChatAsync(int chatId, int userId)
+        {
+            var chat = await _dbContext.Chats.FirstOrDefaultAsync(c => c.Id == chatId);
+            var user = await _dbContext.Users.FirstOrDefaultAsync(u => u.Id == userId);
+            if (chat == null || user == null || !user.Chats.Contains(chat))
+                return false;
+
+            user.Chats.Remove(chat);
+            await _dbContext.SaveChangesAsync();
+            return true;
+        }
     }
 }

@@ -214,12 +214,12 @@ collection:
             send: true
             store: true
           rebuildPath: true
-      - url: http://localhost:7000/api/chats/1
+      - url: https://localhost:7001/api/chats/1
         name: DeleteChatById
         meta:
           id: req_f75a87712153422683c0345c5933dd8c
           created: 1738344318013
-          modified: 1745933910531
+          modified: 1746284033629
           isPrivate: false
           sortKey: -1738344318013
         method: DELETE

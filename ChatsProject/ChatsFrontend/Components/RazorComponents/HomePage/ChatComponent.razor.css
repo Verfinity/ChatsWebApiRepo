@@ -1,0 +1,6 @@
+﻿.chat-container {
+    min-height: 5%;
+    width: 100%;
+    text-align: left;
+    cursor: pointer;
+}

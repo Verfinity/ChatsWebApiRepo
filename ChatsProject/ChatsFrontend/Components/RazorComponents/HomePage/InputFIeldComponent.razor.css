@@ -1,0 +1,19 @@
+﻿.input-message-container {
+    display: flex;
+    height: 30px;
+}
+
+.input-message-container button {
+    font-size: 1.2em;
+    cursor: pointer;
+    margin: 0;
+}
+
+.field-input {
+    font-size: 1em;
+    background-color: black;
+    color: lightgreen;
+    border: 2px solid green;
+    border-radius: 10px;
+    width: 100%;
+}

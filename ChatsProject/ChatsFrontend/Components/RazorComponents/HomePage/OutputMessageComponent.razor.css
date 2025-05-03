@@ -1,0 +1,13 @@
+﻿.message-container {
+    align-self: baseline;
+    max-width: 60%;
+    word-break: break-word;
+}
+
+.message-container p {
+    margin: 0;
+}
+
+.user-message {
+    align-self: flex-end;
+}

@@ -3,6 +3,8 @@
     width: 20%;
     border-right: 3px solid grey;
     padding: 10px;
+    overflow: scroll;
+    overflow-x: hidden;
 }
 
 .chat-data-container {
@@ -20,49 +22,4 @@
     height: 100%;
     overflow: scroll;
     overflow-x: hidden;
-}
-
-.input-message-container {
-    display: flex;
-    height: 30px;
-}
-
-.field-input {
-    font-size: 1em;
-    background-color: black;
-    color: lightgreen;
-    border: 2px solid green;
-    border-radius: 10px;
-    width: 100%;
-}
-
-.input-message-container button {
-    font-size: 1.2em;
-    cursor: pointer;
-    margin: 0;
-}
-
-.chat-container {
-    min-height: 5%;
-    width: 100%;
-    text-align: left;
-    cursor: pointer;
-}
-
-.message-container {
-    align-self: baseline;
-    max-width: 60%;
-    word-break: break-word;
-}
-
-.message-container p {
-    margin: 0;
-}
-
-.author-text {
-    border-bottom: 2px solid darkgreen;
-}
-
-.user-message {
-    align-self: flex-end;
 }

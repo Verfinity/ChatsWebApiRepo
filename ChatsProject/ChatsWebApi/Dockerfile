@@ -13,6 +13,7 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["ChatsWebApi/ChatsWebApi.csproj", "ChatsWebApi/"]
+COPY ["ClassLibrary/ClassLibrary.csproj", "ClassLibrary/"]
 RUN dotnet restore "./ChatsWebApi/ChatsWebApi.csproj"
 COPY . .
 WORKDIR "/src/ChatsWebApi"

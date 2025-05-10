@@ -1,4 +1,5 @@
 ﻿@page "/login"
+@inject NavigationManager NavigationManager
 
 <div class="main-container main-login-container">
     <div class="text-container login-form">
@@ -15,7 +16,14 @@
         </div>
         <div class="login-buttons">
             <button class="text-container login-button">Войти</button>
-            <p class="registration-text">Зарегестрироваться</p>
+            <button class="registration-button" @onclick="RedirectToRegisterPage">Зарегестрироваться</button>
         </div>
     </div>
 </div>
+
+@code {
+    public void RedirectToRegisterPage()
+    {
+        NavigationManager.NavigateTo("register");
+    }
+}

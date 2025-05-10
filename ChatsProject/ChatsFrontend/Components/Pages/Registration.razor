@@ -1,4 +1,5 @@
 ﻿@page "/register"
+@inject HttpClient httpClient
 
 <div class="main-container main-login-container">
     <div class="text-container login-form">
@@ -6,17 +7,36 @@
         <div class="field-containers">
             <div class="field-container">
                 <p class="field-name">Логин</p>
-                <input class="field-input" />
+                <input class="field-input" @bind-value="Nickname" />
             </div>
             <div class="field-container">
                 <p class="field-name">Пароль</p>
-                <input class="field-input" type="password" />
+                <input class="field-input" type="password" @bind-value="Password" />
             </div>
             <div class="field-container">
                 <p class="field-name">Подтверждение пароля</p>
-                <input class="field-input" type="password" />
+                <input class="field-input" type="password" @bind-value="DoublePassword" />
             </div>
         </div>
-        <button class="text-container login-button">Зарегестрироваться</button>
+        <button class="text-container login-button" @onclick="async () => await RegisterAsync()">Зарегестрироваться</button>
     </div>
 </div>
+
+@code {
+    public string Nickname = "";
+    public string Password = "";
+    public string DoublePassword = "";
+
+    public async Task RegisterAsync()
+    {
+        if (Password != DoublePassword)
+            return;
+
+        var loginFields = new LoginFields
+            {
+                NickName = Nickname,
+                Password = Password
+            };
+        var response = await httpClient.PostAsJsonAsync("api/auth/register", loginFields);
+    }
+}

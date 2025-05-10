@@ -1,4 +1,5 @@
 using ChatsFrontend.Components;
+using System.Net;
 
 namespace ChatsFrontend
 {
@@ -11,6 +12,15 @@ namespace ChatsFrontend
             // Add services to the container.
             builder.Services.AddRazorComponents()
                 .AddInteractiveServerComponents();
+
+            string baseAddress = builder.Configuration["ApiAddress"];
+            builder.Services.AddScoped(_ =>
+            {
+                return new HttpClient
+                {
+                    BaseAddress = new Uri(baseAddress)
+                };
+            });
 
             var app = builder.Build();
 

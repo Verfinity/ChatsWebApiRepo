@@ -57,9 +57,12 @@
     margin: 0;
 }
 
-.registration-text {
-    font-size: 0.6em;
+.registration-button {
     align-self: center;
+    color: forestgreen;
+    background: none;
+    border: none;
+    padding: 0;
     margin: 3px 0 3px 0;
     cursor: pointer;
 }

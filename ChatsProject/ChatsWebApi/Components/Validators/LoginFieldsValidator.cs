@@ -1,4 +1,4 @@
-﻿using ChatsWebApi.Components.Types.JWT;
+﻿using ClassLibrary;
 using FluentValidation;
 
 namespace ChatsWebApi.Components.Validators

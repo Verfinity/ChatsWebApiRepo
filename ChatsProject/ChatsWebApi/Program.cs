@@ -3,7 +3,9 @@ using ChatsWebApi.Components.Repositories.Chats;
 using ChatsWebApi.Components.Repositories.Posts;
 using ChatsWebApi.Components.Repositories.Users;
 using ChatsWebApi.Components.Types.Database;
-using ChatsWebApi.Components.Types.JWT;
+using ClassLibrary;
+using ChatsWebApi.Components.Types.JWT.Logic;
+using ChatsWebApi.Components.Types.JWT.Options;
 using ChatsWebApi.Components.Types.Roles;
 using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -29,9 +31,9 @@ namespace ChatsWebApi
                 Key = authConfigs["Key"]
             };
             builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).
-                AddJwtBearer(options =>
+                AddJwtBearer(jwtOptions =>
                 {
-                    options.TokenValidationParameters = new TokenValidationParameters()
+                    jwtOptions.TokenValidationParameters = new TokenValidationParameters()
                     {
                         ValidateIssuer = true,
                         ValidIssuer = authOptions.Issuer,
@@ -44,9 +46,25 @@ namespace ChatsWebApi
                         ValidateIssuerSigningKey = true,
                         IssuerSigningKey = authOptions.GetSymmetricSecurityKey()
                     };
+                    jwtOptions.SaveToken = true;
+                    jwtOptions.Events = new JwtBearerEvents();
+                    jwtOptions.Events.OnMessageReceived += context =>
+                    {
+                        if (context.Request.Cookies.ContainsKey("X-Access-Token"))
+                            context.Token = context.Request.Cookies["X-Access-Token"];
+
+                        return Task.CompletedTask;
+                    };
+                })
+                .AddCookie(cookieOptions =>
+                {
+                    cookieOptions.Cookie.SameSite = SameSiteMode.Strict;
+                    cookieOptions.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+                    cookieOptions.Cookie.IsEssential = true;
                 });
             builder.Services.AddAuthorization();
             builder.Services.AddSingleton<IAuthOptions>(authOptions);
+            builder.Services.AddTransient<IJWTCreator, JWTCreator>();
 
             List<LoginFields> adminLogsList = builder.Configuration.GetSection("AdminLogs").Get<List<LoginFields>>();
 
@@ -86,7 +104,7 @@ namespace ChatsWebApi
                 }
             }
 
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
 
             app.UseMiddleware<ValidationExceptionMiddleware>();
 

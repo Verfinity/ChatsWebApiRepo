@@ -1,17 +1,24 @@
 ﻿@page "/chats"
 
-<div class="main-container">
-    <div class="chats-container">
-        <ChatComponent />
-    </div>
-    <div class="chat-data-container">
-        <div class="messages-container">
-            <InputMessageComponent />
-            <InputMessageComponent />
-            <OutputMessageComponent />
-            <OutputMessageComponent />
-            <OutputMessageComponent />
+<AuthorizeView>
+    <Authorized>
+        <div class="main-container">
+            <div class="chats-container">
+                <ChatComponent />
+            </div>
+            <div class="chat-data-container">
+                <div class="messages-container">
+                    <InputMessageComponent />
+                    <InputMessageComponent />
+                    <OutputMessageComponent />
+                    <OutputMessageComponent />
+                    <OutputMessageComponent />
+                </div>
+                <InputFieldComponent />
+            </div>
         </div>
-        <InputFieldComponent />
-    </div>
-</div>
+    </Authorized>
+    <NotAuthorized>
+        <h1>Oops, you must authorize!</h1>
+    </NotAuthorized>
+</AuthorizeView>

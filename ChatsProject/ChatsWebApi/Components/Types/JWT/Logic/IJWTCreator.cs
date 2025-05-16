@@ -1,10 +1,10 @@
-﻿using ChatsWebApi.Components.Types.JWT.Options;
-using ChatsWebApi.Components.Types.Roles;
+﻿using ChatsWebApi.Components.Types.Database;
+using ChatsWebApi.Components.Types.JWT.Options;
 
 namespace ChatsWebApi.Components.Types.JWT.Logic
 {
     public interface IJWTCreator
     {
-        public string CreateJWT(string nickName, Role role, IAuthOptions authOptions);
+        public string CreateJWT(User user, IAuthOptions authOptions);
     }
 }

@@ -1,5 +1,6 @@
 ﻿@page "/register"
-@inject HttpClient httpClient
+@inject HttpClient HttpClient
+@inject ITokenPairSaver TokenPairSaver
 
 <div class="main-container main-login-container">
     <div class="text-container login-form">
@@ -37,6 +38,12 @@
                 NickName = Nickname,
                 Password = Password
             };
-        var response = await httpClient.PostAsJsonAsync("api/auth/register", loginFields);
+        var response = await HttpClient.PostAsJsonAsync("api/auth/register", loginFields);
+
+        if (response.StatusCode == HttpStatusCode.OK)
+        {
+            var tokenPair = await response.Content.ReadFromJsonAsync<TokenPair>();
+            await TokenPairSaver.SaveDataAsync(tokenPair);
+        }
     }
 }

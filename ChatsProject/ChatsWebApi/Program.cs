@@ -47,20 +47,6 @@ namespace ChatsWebApi
                         IssuerSigningKey = authOptions.GetSymmetricSecurityKey()
                     };
                     jwtOptions.SaveToken = true;
-                    jwtOptions.Events = new JwtBearerEvents();
-                    jwtOptions.Events.OnMessageReceived += context =>
-                    {
-                        if (context.Request.Cookies.ContainsKey("X-Access-Token"))
-                            context.Token = context.Request.Cookies["X-Access-Token"];
-
-                        return Task.CompletedTask;
-                    };
-                })
-                .AddCookie(cookieOptions =>
-                {
-                    cookieOptions.Cookie.SameSite = SameSiteMode.Strict;
-                    cookieOptions.Cookie.SecurePolicy = CookieSecurePolicy.Always;
-                    cookieOptions.Cookie.IsEssential = true;
                 });
             builder.Services.AddAuthorization();
             builder.Services.AddSingleton<IAuthOptions>(authOptions);

@@ -1,5 +1,5 @@
-﻿using ChatsWebApi.Components.Types.JWT.Options;
-using ChatsWebApi.Components.Types.Roles;
+﻿using ChatsWebApi.Components.Types.Database;
+using ChatsWebApi.Components.Types.JWT.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -8,12 +8,12 @@ namespace ChatsWebApi.Components.Types.JWT.Logic
 {
     public class JWTCreator : IJWTCreator
     {
-        public string CreateJWT(string nickName, Role role, IAuthOptions authOptions)
+        public string CreateJWT(User user, IAuthOptions authOptions)
         {
             var claims = new List<Claim>()
             {
-                new Claim(ClaimTypes.Name, nickName),
-                new Claim(ClaimTypes.Role, role.ToString())
+                new Claim(ClaimTypes.Name, user.NickName),
+                new Claim(ClaimTypes.Role, user.Role.ToString())
             };
             var jwt = new JwtSecurityToken(
                 issuer: authOptions.Issuer,

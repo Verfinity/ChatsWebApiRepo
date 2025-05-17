@@ -19,12 +19,9 @@ namespace ChatsFrontend.Logic.SavingData.TokensSaver
             _storage = storage;
         }
 
-        public async Task<TokenPair> GetDataAsync()
+        public async Task<TokenPair?> GetDataAsync()
         {
             var result = await _storage.GetAsync<TokenPair>(_key);
-            if (!result.Success)
-                throw new GetSavedDataException("Can't get TokenPair object from storage");
-
             return result.Value;
         }
 

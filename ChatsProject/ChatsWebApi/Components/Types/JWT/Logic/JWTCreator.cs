@@ -1,4 +1,4 @@
-﻿using ChatsWebApi.Components.Types.Database;
+﻿using ClassLibrary;
 using ChatsWebApi.Components.Types.JWT.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;

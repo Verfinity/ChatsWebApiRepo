@@ -1,4 +1,5 @@
 ﻿using ChatsWebApi.Components.Types.Database;
+using ClassLibrary;
 
 namespace ChatsWebApi.Components.Repositories.Users
 {

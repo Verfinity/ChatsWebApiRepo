@@ -1,5 +1,4 @@
 ﻿using ChatsWebApi.Components.Repositories.Users;
-using ChatsWebApi.Components.Types.Database;
 using ClassLibrary;
 using ChatsWebApi.Components.Types.JWT.Logic;
 using ChatsWebApi.Components.Types.JWT.Options;

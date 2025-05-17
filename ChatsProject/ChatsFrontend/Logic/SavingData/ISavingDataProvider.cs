@@ -3,6 +3,6 @@
     public interface ISavingDataProvider<T> where T : notnull
     {
         public Task SaveDataAsync(T dataObject);
-        public Task<T> GetDataAsync();
+        public Task<T?> GetDataAsync();
     }
 }

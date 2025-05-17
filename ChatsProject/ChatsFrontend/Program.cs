@@ -1,4 +1,5 @@
 using ChatsFrontend.Components;
+using ChatsFrontend.Logic.HttpClients;
 using ChatsFrontend.Logic.SavingData.TokensSaver;
 using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
 using System.Net;
@@ -16,12 +17,16 @@ namespace ChatsFrontend
                 .AddInteractiveServerComponents();
 
             string baseAddress = builder.Configuration["ApiAddress"];
-            builder.Services.AddScoped(_ =>
+            string authScheme = builder.Configuration["AuthorizationScheme"];
+            builder.Services.AddScoped<IAuthHttpClient>(serviceProvider =>
             {
-                return new HttpClient
+                var httpClient = new HttpClient
                 {
                     BaseAddress = new Uri(baseAddress)
                 };
+                var tokenPairSaver = serviceProvider.GetRequiredService<ITokenPairSaver>();
+
+                return new AuthHttpClient(httpClient, tokenPairSaver, authScheme);
             });
 
             string tokenPairSaveKey = builder.Configuration.GetSection("StorageKeys")["SaveTokensKey"];

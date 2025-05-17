@@ -1,24 +1,34 @@
 ﻿@page "/chats"
+@inject NavigationManager NavigationManager
+@inject IAuthHttpClient AuthHttpClient
 
-<AuthorizeView>
-    <Authorized>
-        <div class="main-container">
-            <div class="chats-container">
-                <ChatComponent />
-            </div>
-            <div class="chat-data-container">
-                <div class="messages-container">
-                    <InputMessageComponent />
-                    <InputMessageComponent />
-                    <OutputMessageComponent />
-                    <OutputMessageComponent />
-                    <OutputMessageComponent />
-                </div>
-                <InputFieldComponent />
-            </div>
+<div class="main-container">
+    <div class="chats-container">
+        <ChatComponent />
+    </div>
+    <div class="chat-data-container">
+        <div class="messages-container">
+            <InputMessageComponent />
+            <InputMessageComponent />
+            <OutputMessageComponent />
+            <OutputMessageComponent />
+            <OutputMessageComponent />
         </div>
-    </Authorized>
-    <NotAuthorized>
-        <h1>Oops, you must authorize!</h1>
-    </NotAuthorized>
-</AuthorizeView>
+        <InputFieldComponent />
+    </div>
+</div>
+
+@code {
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            var allChats = await AuthHttpClient.GetAsync<List<Chat>>($"api/chats/?userId={1}");
+            Console.WriteLine("AllChats: " + allChats);
+        }
+        catch (UnauthorizedAccessException)
+        {
+            NavigationManager.NavigateTo("unauthorized");
+        }
+    }
+}

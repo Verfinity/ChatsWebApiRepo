@@ -1,5 +1,5 @@
 ﻿using ChatsWebApi.Components.Repositories.Users;
-using ChatsWebApi.Components.Types.Database;
+using ClassLibrary;
 using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

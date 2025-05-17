@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using ClassLibrary;
 
 namespace ChatsWebApi.Components.Types.Database
 {

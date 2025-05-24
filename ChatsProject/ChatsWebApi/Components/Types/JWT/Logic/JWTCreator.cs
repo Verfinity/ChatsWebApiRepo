@@ -12,7 +12,7 @@ namespace ChatsWebApi.Components.Types.JWT.Logic
         {
             var claims = new List<Claim>()
             {
-                new Claim(ClaimTypes.Name, user.NickName),
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                 new Claim(ClaimTypes.Role, user.Role.ToString())
             };
             var jwt = new JwtSecurityToken(

@@ -1,6 +1,7 @@
 using ChatsFrontend.Components;
 using ChatsFrontend.Logic.HttpClients;
 using ChatsFrontend.Logic.SavingData.TokensSaver;
+using ChatsFrontend.Logic.SavingData.UserData;
 using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
 using System.Net;
 
@@ -34,6 +35,8 @@ namespace ChatsFrontend
             {
                 return new TokenPairSaver(tokenPairSaveKey, serviceProvider.GetRequiredService<ProtectedLocalStorage>());
             });
+
+            builder.Services.AddScoped<IUserDataReader, UserDataReader>();
 
             var app = builder.Build();
 

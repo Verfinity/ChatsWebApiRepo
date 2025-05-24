@@ -4,7 +4,7 @@
 ## Get latest from https://github.com/github/gitignore/blob/main/VisualStudio.gitignore
 
 # Database directory
-//[Dd]atabase/
+[Dd]atabase/
 
 # User-specific files
 *.rsuser

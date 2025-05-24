@@ -73,8 +73,7 @@ namespace ChatsWebApi
             using (var scope = app.Services.CreateScope())
             {
                 var dbContext = scope.ServiceProvider.GetRequiredService<AppDBContext>();
-                if (dbContext.Database.GetMigrations().Count() > 0)
-                    await dbContext.Database.MigrateAsync();
+                await dbContext.Database.MigrateAsync();
 
                 var usersRepo = scope.ServiceProvider.GetRequiredService<IUsersRepository>();
                 foreach (var adminLog in adminLogsList)

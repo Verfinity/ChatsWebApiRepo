@@ -54,7 +54,7 @@ namespace ChatsFrontend.Logic.HttpClients
             if (currentTokenPair == null)
                 throw new UnauthorizedAccessException("Can't get token pair from storage!");
 
-            var newTokenPairResponse = await _httpClient.GetAsync($"RefreshPath/{currentTokenPair.RefreshToken}");
+            var newTokenPairResponse = await _httpClient.GetAsync($"{RefreshPath}/{currentTokenPair.RefreshToken}");
             if (newTokenPairResponse.StatusCode == HttpStatusCode.BadRequest)
                 throw new UnauthorizedAccessException("Refresh token is invalid!");
 

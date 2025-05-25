@@ -20,7 +20,8 @@ namespace ChatsWebApi.Components.Repositories.ChatsToUsers
 
             var createdChatsUsers = await _dbContext.ChatsUsers.AddAsync(chatsUsers);
             await _dbContext.SaveChangesAsync();
-            return createdChatsUsers.Entity;
+
+            return (ChatsUsers?)(await createdChatsUsers.GetDatabaseValuesAsync()).ToObject();
         }
 
         public async Task<bool> RemoveUserFromChatAsync(ChatsUsers chatsUsers)

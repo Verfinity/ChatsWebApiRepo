@@ -3,12 +3,11 @@ using ClassLibrary;
 using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 
 namespace ChatsWebApi.Components.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/chats-users")]
     [Authorize]
     public class ChatsUsersController : ControllerBase
     {
@@ -22,8 +21,8 @@ namespace ChatsWebApi.Components.Controllers
         }
 
         [HttpPost]
-        [Route("add-current-user-to-chat/{chatId}")]
-        public async Task<ActionResult<ChatsUsers>> AddCurrentUserToChatAsync([FromRoute] int chatId)
+        [Route("current-user")]
+        public async Task<ActionResult<ChatsUsers>> AddCurrentUserToChatAsync([FromQuery] int chatId)
         {
             var chatsUsers = new ChatsUsers
             {
@@ -38,9 +37,9 @@ namespace ChatsWebApi.Components.Controllers
             return BadRequest("This relation already exists!");
         }
 
-        [HttpPost]
-        [Route("remove-current-user-from-chat/{chatId}")]
-        public async Task<ActionResult> RemoveCurrentUserFromChatAsync([FromRoute] int chatId)
+        [HttpDelete]
+        [Route("current-user")]
+        public async Task<ActionResult> RemoveCurrentUserFromChatAsync([FromQuery] int chatId)
         {
             var chatsUsers = new ChatsUsers
             {

@@ -29,7 +29,7 @@ namespace ChatsWebApi.Components.Controllers
         }
 
         [HttpGet]
-        [Route("get-current-user")]
+        [Route("current-user")]
         public async Task<ActionResult<User?>> GetCurrentUserAsync()
         {
             int id = int.Parse(HttpContext.User.Identity.Name);
@@ -40,7 +40,7 @@ namespace ChatsWebApi.Components.Controllers
         }
 
         [HttpDelete]
-        [Route("remove-current-user")]
+        [Route("current-user")]
         public async Task<ActionResult<User?>> RemoveCurrentUserAsync()
         {
             int id = int.Parse(HttpContext.User.Identity.Name);

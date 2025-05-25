@@ -21,7 +21,8 @@ namespace ChatsWebApi.Components.Repositories.Users
 
             var createdItem = await _dbContext.Users.AddAsync(item);
             await _dbContext.SaveChangesAsync();
-            return createdItem.Entity;
+
+            return (User?)(await createdItem.GetDatabaseValuesAsync()).ToObject();
         }
 
         public async Task<bool> DeleteAsync(int id)

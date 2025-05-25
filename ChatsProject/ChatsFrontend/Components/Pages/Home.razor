@@ -1,8 +1,6 @@
 ﻿@page "/chats"
-@using System.Security.Claims;
 @inject NavigationManager NavigationManager
 @inject IAuthHttpClient AuthHttpClient
-@inject IUserDataReader UserDataReader
 
 <div class="main-container">
     <div class="chats-container">
@@ -21,19 +19,11 @@
 </div>
 
 @code {
-    private int? _userId = null;
-
     protected override async Task OnInitializedAsync()
-    {
-        await SetUserIdAsync();
-    }
-
-    private async Task SetUserIdAsync()
     {
         try
         {
-            var claims = await UserDataReader.ReadUserDataAsync();
-            _userId = int.Parse(claims.First(c => c.Type == ClaimTypes.NameIdentifier.ToString()).Value);
+            await AuthHttpClient.GetAsync<string>("auth/ping");
         }
         catch (UnauthorizedAccessException)
         {

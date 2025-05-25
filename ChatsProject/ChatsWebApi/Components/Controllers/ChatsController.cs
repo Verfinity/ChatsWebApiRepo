@@ -22,8 +22,10 @@ namespace ChatsWebApi.Components.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<Chat>>> GetChatsByUserIdAsnync([FromQuery] int userId)
+        [Route("current-user")]
+        public async Task<ActionResult<List<Chat>>> GetCurrentUserChatsAsync()
         {
+            int userId = int.Parse(HttpContext.User.Identity.Name);
             List<Chat> chats = await _chatsRepo.GetChatsByUserIdAsync(userId);
             if (chats.IsNullOrEmpty())
                 return NoContent();

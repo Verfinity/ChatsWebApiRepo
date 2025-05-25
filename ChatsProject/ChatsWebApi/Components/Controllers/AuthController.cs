@@ -1,10 +1,11 @@
 ﻿using ChatsWebApi.Components.Repositories.Users;
 using ClassLibrary;
-using ChatsWebApi.Components.Types.JWT.Logic;
 using ChatsWebApi.Components.Types.JWT.Options;
 using ChatsWebApi.Components.Types.Roles;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
+using ChatsWebApi.Components.Types.JWT.Logic.Creation;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ChatsWebApi.Components.Controllers
 {
@@ -23,6 +24,14 @@ namespace ChatsWebApi.Components.Controllers
             _jwtCreator = jwtCreator;
             _usersRepo = usersRepo;
             _lfValidator = lfValidator;
+        }
+
+        [HttpGet]
+        [Route("ping")]
+        [Authorize]
+        public async Task<ActionResult<string>> CheckAuthAsync()
+        {
+            return Ok("pong");
         }
 
         [HttpPost]

@@ -23,9 +23,9 @@ namespace ChatsWebApi.Components.Repositories.Posts
             if (!item.Chat.Users.Contains(item.User))
                 return null;
 
-            await _dbContext.Posts.AddAsync(item);
+            var createdItem = await _dbContext.Posts.AddAsync(item);
             await _dbContext.SaveChangesAsync();
-            return item;
+            return createdItem.Entity;
         }
 
         public async Task<bool> DeleteAsync(int id)

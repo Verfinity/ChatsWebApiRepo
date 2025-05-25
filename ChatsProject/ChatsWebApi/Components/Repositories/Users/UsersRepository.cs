@@ -19,9 +19,9 @@ namespace ChatsWebApi.Components.Repositories.Users
             if (userWithSameNickName != null)
                 return null;
 
-            await _dbContext.Users.AddAsync(item);
+            var createdItem = await _dbContext.Users.AddAsync(item);
             await _dbContext.SaveChangesAsync();
-            return item;
+            return createdItem.Entity;
         }
 
         public async Task<bool> DeleteAsync(int id)
@@ -63,30 +63,6 @@ namespace ChatsWebApi.Components.Repositories.Users
 
             user.RefreshToken = refreshToken;
             _dbContext.Users.Update(user);
-            await _dbContext.SaveChangesAsync();
-            return true;
-        }
-
-        public async Task<bool> AddUserToChatAsync(int chatId, int userId)
-        {
-            var chat = await _dbContext.Chats.FirstOrDefaultAsync(c => c.Id == chatId);
-            var user = await _dbContext.Users.FirstOrDefaultAsync(u => u.Id == userId);
-            if (chat == null || user == null)
-                return false;
-
-            user.Chats.Add(chat);
-            await _dbContext.SaveChangesAsync();
-            return true;
-        }
-
-        public async Task<bool> RemoveUserFromChatAsync(int chatId, int userId)
-        {
-            var chat = await _dbContext.Chats.FirstOrDefaultAsync(c => c.Id == chatId);
-            var user = await _dbContext.Users.FirstOrDefaultAsync(u => u.Id == userId);
-            if (chat == null || user == null || !user.Chats.Contains(chat))
-                return false;
-
-            user.Chats.Remove(chat);
             await _dbContext.SaveChangesAsync();
             return true;
         }

@@ -4,13 +4,14 @@ using ChatsWebApi.Components.Repositories.Posts;
 using ChatsWebApi.Components.Repositories.Users;
 using ChatsWebApi.Components.Types.Database;
 using ClassLibrary;
-using ChatsWebApi.Components.Types.JWT.Logic;
 using ChatsWebApi.Components.Types.JWT.Options;
 using ChatsWebApi.Components.Types.Roles;
 using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using ChatsWebApi.Components.Types.JWT.Logic.Creation;
+using ChatsWebApi.Components.Repositories.ChatsToUsers;
 
 namespace ChatsWebApi
 {
@@ -63,6 +64,7 @@ namespace ChatsWebApi
             builder.Services.AddTransient<IUsersRepository, UsersRepository>();
             builder.Services.AddTransient<IChatsRepository, ChatsRepository>();
             builder.Services.AddTransient<IPostsRepository, PostsRepository>();
+            builder.Services.AddTransient<IChatsUsersRepository, ChatsUsersRepository>();
 
             builder.Services.AddControllers();
 

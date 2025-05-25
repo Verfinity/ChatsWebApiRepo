@@ -39,7 +39,7 @@
                 NickName = Nickname,
                 Password = Password
             };
-        var response = await AuthHttpClient.SendAsync("api/auth/register", loginFields);
+        var response = await AuthHttpClient.SendAsync("auth/register", loginFields);
 
         if (response.StatusCode == HttpStatusCode.OK)
         {

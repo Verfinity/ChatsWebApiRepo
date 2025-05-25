@@ -8,6 +8,7 @@ namespace ChatsWebApi.Components.Types.Database
         public DbSet<User> Users { get; set; }
         public DbSet<Chat> Chats { get; set; }
         public DbSet<Post> Posts { get; set; }
+        public DbSet<ChatsUsers> ChatsUsers { get; set; }
 
         public AppDBContext(DbContextOptions<AppDBContext> options) : base(options)
         {
@@ -19,7 +20,16 @@ namespace ChatsWebApi.Components.Types.Database
                 .Entity<Chat>()
                 .HasMany(u => u.Users)
                 .WithMany(c => c.Chats)
-                .UsingEntity<ChatsToUsers>();
+                .UsingEntity<ChatsUsers>(
+                    cu =>
+                    cu.HasOne(cu => cu.User)
+                    .WithMany()
+                    .HasForeignKey(cu => cu.UserId),
+                    
+                    cu =>
+                    cu.HasOne(cu => cu.Chat)
+                    .WithMany()
+                    .HasForeignKey(cu => cu.ChatId));
 
             modelBuilder
                 .Entity<Post>()

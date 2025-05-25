@@ -4,7 +4,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 
-namespace ChatsWebApi.Components.Types.JWT.Logic
+namespace ChatsWebApi.Components.Types.JWT.Logic.Creation
 {
     public class JWTCreator : IJWTCreator
     {
@@ -12,7 +12,7 @@ namespace ChatsWebApi.Components.Types.JWT.Logic
         {
             var claims = new List<Claim>()
             {
-                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                new Claim(ClaimTypes.Name, user.Id.ToString()),
                 new Claim(ClaimTypes.Role, user.Role.ToString())
             };
             var jwt = new JwtSecurityToken(

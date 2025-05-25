@@ -1,7 +1,7 @@
 ﻿using ClassLibrary;
 using ChatsWebApi.Components.Types.JWT.Options;
 
-namespace ChatsWebApi.Components.Types.JWT.Logic
+namespace ChatsWebApi.Components.Types.JWT.Logic.Creation
 {
     public interface IJWTCreator
     {

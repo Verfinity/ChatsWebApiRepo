@@ -31,7 +31,10 @@ namespace ChatsWebApi.Components.Controllers
         [Authorize]
         public async Task<ActionResult<string>> CheckAuthAsync()
         {
-            return Ok("pong");
+            var user = await _usersRepo.GetByIdAsync(int.Parse(HttpContext.User.Identity.Name));
+            if (user != null)
+                return Ok("pong");
+            return Unauthorized("This user doesn't exist!");
         }
 
         [HttpPost]

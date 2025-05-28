@@ -4,30 +4,62 @@
 
 <div class="main-container">
     <div class="chats-container">
-        <ChatComponent />
+        @if (UserChats != null)
+        {
+            foreach (Chat chat in UserChats)
+            {
+                <ChatComponent ChatData="chat" OnClickCallback="GetPostsInChat" />
+            }
+        }
     </div>
     <div class="chat-data-container">
         <div class="messages-container">
-            <InputMessageComponent />
-            <InputMessageComponent />
-            <OutputMessageComponent />
-            <OutputMessageComponent />
-            <OutputMessageComponent />
+            @if (CurrentPosts != null)
+            {
+                foreach (Post post in CurrentPosts)
+                {
+                    if (post.UserId != UserId)
+                    {
+                        <InputMessageComponent AuthorName="@post.User.NickName" Content="@post.Content" />
+                    }
+                    else
+                    {
+                        <OutputMessageComponent Content="@post.Content" />
+                    }
+                }
+            }
         </div>
         <InputFieldComponent />
     </div>
 </div>
 
 @code {
+    public List<Chat> UserChats = new List<Chat>();
+    public List<Post> CurrentPosts = new List<Post>();
+    public int? UserId = null;
+
     protected override async Task OnInitializedAsync()
     {
-        try
-        {
-            await AuthHttpClient.GetAsync<string>("auth/ping");
-        }
-        catch (UnauthorizedAccessException)
+        if (await AuthHttpClient.IsAuthorize() == false)
         {
             NavigationManager.NavigateTo("login");
+            return;
+        }
+
+        UserChats = await AuthHttpClient.GetAsync<List<Chat>>("chats/current-user");
+        UserId = (await AuthHttpClient.GetAsync<User>("users/current-user")).Id;
+    }
+
+    private async Task GetPostsInChat(int chatId)
+    {
+        CurrentPosts = await AuthHttpClient.GetAsync<List<Post>>($"posts/?chatId={chatId}");
+        if (CurrentPosts == null)
+            return;
+
+        for (int i = 0; i < CurrentPosts.Count; i++)
+        {
+            var userInPost = await AuthHttpClient.GetAsync<User>($"users/{CurrentPosts[i].UserId}");
+            CurrentPosts[i].User = userInPost;
         }
     }
 }

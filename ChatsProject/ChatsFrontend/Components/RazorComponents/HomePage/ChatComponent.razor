@@ -1,1 +1,13 @@
-﻿<button class="text-container chat-container">First chat</button>
+﻿<button class="text-container chat-container" @onclick="OnClicked">@ChatData.Name</button>
+
+@code {
+    [Parameter]
+    public Chat ChatData { get; set; }
+    [Parameter]
+    public EventCallback<int> OnClickCallback { get; set; }
+
+    private async Task OnClicked()
+    {
+        await OnClickCallback.InvokeAsync(ChatData.Id);
+    }
+}

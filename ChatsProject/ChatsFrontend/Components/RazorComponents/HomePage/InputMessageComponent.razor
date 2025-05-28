@@ -1,4 +1,11 @@
 ﻿<div class="text-container message-container">
-    <p class="author-text">Ilya</p>
-    <p class="message-text">Some</p>
+    <p class="author-text">@AuthorName</p>
+    <p class="message-text">@Content</p>
 </div>
+
+@code {
+    [Parameter]
+    public string AuthorName { get; set; }
+    [Parameter]
+    public string Content { get; set; }
+}

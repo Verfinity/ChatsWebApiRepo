@@ -22,7 +22,9 @@ namespace ChatsFrontend.Logic.SavingData.TokensSaver
         public async Task<TokenPair?> GetDataAsync()
         {
             var result = await _storage.GetAsync<TokenPair>(_key);
-            return result.Value;
+            if (result.Success)
+                return result.Value;
+            return null;
         }
 
         public async Task SaveDataAsync(TokenPair dataObject)

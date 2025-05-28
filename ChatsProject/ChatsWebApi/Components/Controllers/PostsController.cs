@@ -31,8 +31,14 @@ namespace ChatsWebApi.Components.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Post>> CreateNewPostAsync([FromBody] Post newPost)
+        public async Task<ActionResult<Post>> CreateNewPostAsync([FromBody] ChatMessage chatMessage)
         {
+            var newPost = new Post
+            {
+                Content = chatMessage.Content,
+                ChatId = chatMessage.ChatId,
+                UserId = int.Parse(HttpContext.User.Identity.Name)
+            };
             await _postValidator.ValidateAndThrowAsync(newPost);
 
             Post? post = await _postsRepo.CreateAsync(newPost);
@@ -45,6 +51,11 @@ namespace ChatsWebApi.Components.Controllers
         [Route("{id}")]
         public async Task<ActionResult> DeletePostAsync([FromRoute] int id)
         {
+            var postToDelete = await _postsRepo.GetByIdAsync(id);
+            int userId = int.Parse(HttpContext.User.Identity.Name);
+            if (postToDelete.UserId != userId)
+                return BadRequest("Can't delete someone else's post!");
+
             if (await _postsRepo.DeleteAsync(id))
                 return Ok();
             return BadRequest();

@@ -18,10 +18,17 @@ namespace ChatsWebApi.Components.Repositories.ChatsToUsers
             if (sameChatsUsers != null)
                 return null;
 
-            var createdChatsUsers = await _dbContext.ChatsUsers.AddAsync(chatsUsers);
-            await _dbContext.SaveChangesAsync();
+            try
+            {
+                var createdChatsUsers = await _dbContext.ChatsUsers.AddAsync(chatsUsers);
+                await _dbContext.SaveChangesAsync();
+                return (ChatsUsers?)(await createdChatsUsers.GetDatabaseValuesAsync()).ToObject();
+            }
+            catch
+            {
+                return null;
+            }
 
-            return (ChatsUsers?)(await createdChatsUsers.GetDatabaseValuesAsync()).ToObject();
         }
 
         public async Task<bool> RemoveUserFromChatAsync(ChatsUsers chatsUsers)
@@ -30,9 +37,16 @@ namespace ChatsWebApi.Components.Repositories.ChatsToUsers
             if (sameChatsUsers == null)
                 return false;
 
-            _dbContext.ChatsUsers.Remove(sameChatsUsers);
-            await _dbContext.SaveChangesAsync();
-            return true;
+            try
+            {
+                _dbContext.ChatsUsers.Remove(sameChatsUsers);
+                await _dbContext.SaveChangesAsync();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
     }
 }

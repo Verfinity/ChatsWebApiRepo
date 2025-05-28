@@ -29,6 +29,16 @@ namespace ChatsWebApi.Components.Controllers
         }
 
         [HttpGet]
+        [Route("{userId}")]
+        public async Task<ActionResult<User?>> GetUserById([FromRoute] int userId)
+        {
+            User? user = await _usersRepo.GetByIdAsync(userId);
+            if (user != null)
+                return Ok(user);
+            return NoContent();
+        }
+
+        [HttpGet]
         [Route("current-user")]
         public async Task<ActionResult<User?>> GetCurrentUserAsync()
         {

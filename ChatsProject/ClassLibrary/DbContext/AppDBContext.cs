@@ -1,14 +1,16 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ClassLibrary;
+using Microsoft.AspNetCore.DataProtection.EntityFrameworkCore;
 
 namespace ChatsWebApi.Components.Types.Database
 {
-    public class AppDBContext : DbContext
+    public class AppDBContext : DbContext, IDataProtectionKeyContext
     {
         public DbSet<User> Users { get; set; }
         public DbSet<Chat> Chats { get; set; }
         public DbSet<Post> Posts { get; set; }
         public DbSet<ChatsUsers> ChatsUsers { get; set; }
+        public DbSet<DataProtectionKey> DataProtectionKeys { get; set; }
 
         public AppDBContext(DbContextOptions<AppDBContext> options) : base(options)
         {

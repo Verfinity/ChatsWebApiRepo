@@ -2,7 +2,8 @@ using ChatsFrontend.Components;
 using ChatsFrontend.Logic.HttpClients;
 using ChatsFrontend.Logic.SavingData.TokensSaver;
 using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
-using System.Net;
+using ChatsWebApi.Components.Types.Database;
+using Microsoft.AspNetCore.DataProtection;
 
 namespace ChatsFrontend
 {
@@ -15,6 +16,12 @@ namespace ChatsFrontend
             // Add services to the container.
             builder.Services.AddRazorComponents()
                 .AddInteractiveServerComponents();
+
+            /*
+            builder.Services.AddDataProtection()
+                .PersistKeysToDbContext<AppDBContext>()
+                .SetApplicationName("Chats");
+            */
 
             string baseAddress = builder.Configuration["ApiAddress"];
             string authScheme = builder.Configuration["AuthorizationScheme"];

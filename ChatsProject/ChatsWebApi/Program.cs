@@ -2,7 +2,6 @@ using ChatsWebApi.Components.Middlewares;
 using ChatsWebApi.Components.Repositories.Chats;
 using ChatsWebApi.Components.Repositories.Posts;
 using ChatsWebApi.Components.Repositories.Users;
-using ChatsWebApi.Components.Types.Database;
 using ClassLibrary;
 using ChatsWebApi.Components.Types.JWT.Options;
 using ChatsWebApi.Components.Types.Roles;
@@ -58,7 +57,7 @@ namespace ChatsWebApi
             string? connStr = builder.Configuration.GetConnectionString("Postgres");
             builder.Services.AddDbContext<AppDBContext>(optionsBuilder =>
             {
-                optionsBuilder.UseLazyLoadingProxies().UseNpgsql(connStr);
+                optionsBuilder.UseLazyLoadingProxies().UseNpgsql(connStr, b => b.MigrationsAssembly(typeof(Program).Assembly.GetName().Name));
             });
 
             builder.Services.AddTransient<IUsersRepository, UsersRepository>();

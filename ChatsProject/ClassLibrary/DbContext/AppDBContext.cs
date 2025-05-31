@@ -1,8 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using ClassLibrary;
 using Microsoft.AspNetCore.DataProtection.EntityFrameworkCore;
 
-namespace ChatsWebApi.Components.Types.Database
+namespace ClassLibrary
 {
     public class AppDBContext : DbContext, IDataProtectionKeyContext
     {

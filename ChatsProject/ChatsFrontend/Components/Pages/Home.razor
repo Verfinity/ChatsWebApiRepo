@@ -1,9 +1,15 @@
 ﻿@page "/chats"
 @inject NavigationManager NavigationManager
 @inject IAuthHttpClient AuthHttpClient
+@inject IUserAuthorizer UserAuthorizer
 
 <div class="main-container">
     <div class="chats-container">
+        @if (User != null)
+        {
+            <UserAccountComponent UserName="@User.NickName" OnSignOutButtonClickCallback="SignOutUserAsync" />
+            <ChatFinderComponent />
+        }
         @if (UserChats != null)
         {
             foreach (Chat chat in UserChats)
@@ -18,7 +24,7 @@
             {
                 foreach (Post post in CurrentPosts)
                 {
-                    if (post.UserId != UserId)
+                    if (post.UserId != User.Id)
                     {
                         <InputMessageComponent AuthorName="@post.User.NickName" Content="@post.Content" />
                     }
@@ -36,7 +42,7 @@
 @code {
     public List<Chat> UserChats = new List<Chat>();
     public List<Post> CurrentPosts = new List<Post>();
-    public int? UserId = null;
+    public User? User = null;
 
     protected override async Task OnInitializedAsync()
     {
@@ -46,8 +52,8 @@
             return;
         }
 
+        User = await AuthHttpClient.GetAsync<User>("users/current-user");
         UserChats = await AuthHttpClient.GetAsync<List<Chat>>("chats/current-user");
-        UserId = (await AuthHttpClient.GetAsync<User>("users/current-user")).Id;
     }
 
     private async Task GetPostsInChat(int chatId)
@@ -61,5 +67,11 @@
             var userInPost = await AuthHttpClient.GetAsync<User>($"users/{CurrentPosts[i].UserId}");
             CurrentPosts[i].User = userInPost;
         }
+    }
+
+    private async Task SignOutUserAsync()
+    {
+        await UserAuthorizer.SignOutUserAsync();
+        NavigationManager.NavigateTo("login");
     }
 }

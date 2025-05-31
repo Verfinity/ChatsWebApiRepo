@@ -1,5 +1,4 @@
-﻿using ChatsWebApi.Components.Types.Database;
-using ClassLibrary;
+﻿using ClassLibrary;
 
 namespace ChatsWebApi.Components.Repositories.Posts
 {

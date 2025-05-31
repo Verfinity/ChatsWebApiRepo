@@ -19,12 +19,30 @@ namespace ChatsFrontend.Logic.SavingData.TokensSaver
             _storage = storage;
         }
 
+        public async Task<bool> DeleteDataAsync()
+        {
+            try
+            {
+                await _storage.DeleteAsync(_key);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
         public async Task<TokenPair?> GetDataAsync()
         {
-            var result = await _storage.GetAsync<TokenPair>(_key);
-            if (result.Success)
+            try
+            {
+                var result = await _storage.GetAsync<TokenPair>(_key);
                 return result.Value;
-            return null;
+            }
+            catch
+            {
+                return null;
+            }
         }
 
         public async Task SaveDataAsync(TokenPair dataObject)

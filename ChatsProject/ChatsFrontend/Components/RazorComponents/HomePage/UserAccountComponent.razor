@@ -1,0 +1,16 @@
+﻿<div class="user-container">
+    <p class="text-container user-name">@UserName</p>
+    <button class="text-container sign-out-button" @onclick="OnClicked">Sign out</button>
+</div>
+
+@code {
+    [Parameter]
+    public string UserName { get; set; }
+    [Parameter]
+    public EventCallback OnSignOutButtonClickCallback { get; set; }
+
+    private async Task OnClicked()
+    {
+        await OnSignOutButtonClickCallback.InvokeAsync();
+    }
+}

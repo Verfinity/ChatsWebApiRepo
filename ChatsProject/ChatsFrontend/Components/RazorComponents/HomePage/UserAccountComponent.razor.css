@@ -1,0 +1,18 @@
+﻿.user-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    height: 5%;
+    border-bottom: 2px solid lightgreen;
+}
+
+.user-name {
+    align-self: center;
+    border: none;
+}
+
+.sign-out-button {
+    align-self: center;
+    cursor: pointer;
+    font-size: 100%;
+}

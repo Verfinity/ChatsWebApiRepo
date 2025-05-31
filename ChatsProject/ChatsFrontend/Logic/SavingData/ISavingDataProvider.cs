@@ -4,5 +4,6 @@
     {
         public Task SaveDataAsync(T dataObject);
         public Task<T?> GetDataAsync();
+        public Task<bool> DeleteDataAsync();
     }
 }

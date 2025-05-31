@@ -1,7 +1,6 @@
 ﻿@page "/login"
 @inject NavigationManager NavigationManager
-@inject IAuthHttpClient AuthHttpClient
-@inject ITokenPairSaver TokenPairSaver
+@inject IUserAuthorizer UserAuthorizer
 
 <div class="main-container main-login-container">
     <div class="text-container login-form">
@@ -37,14 +36,9 @@
                 NickName = Nickname,
                 Password = Password
             };
-        var response = await AuthHttpClient.SendAsync("auth/login", loginFields);
 
-        if (response.StatusCode == HttpStatusCode.OK)
-        {
-            var tokenPair = await response.Content.ReadFromJsonAsync<TokenPair>();
-            await TokenPairSaver.SaveDataAsync(tokenPair);
+        if (await UserAuthorizer.LoginUserAsync(loginFields))
             NavigationManager.NavigateTo("chats");
-        }
     }
 
     public void RedirectToRegisterPage()

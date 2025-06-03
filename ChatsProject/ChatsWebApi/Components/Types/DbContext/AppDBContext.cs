@@ -1,15 +1,14 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.DataProtection.EntityFrameworkCore;
+﻿using ClassLibrary;
+using Microsoft.EntityFrameworkCore;
 
-namespace ClassLibrary
+namespace ChatsWebApi.Components.Types
 {
-    public class AppDBContext : DbContext, IDataProtectionKeyContext
+    public class AppDBContext : DbContext
     {
         public DbSet<User> Users { get; set; }
         public DbSet<Chat> Chats { get; set; }
         public DbSet<Post> Posts { get; set; }
         public DbSet<ChatsUsers> ChatsUsers { get; set; }
-        public DbSet<DataProtectionKey> DataProtectionKeys { get; set; }
 
         public AppDBContext(DbContextOptions<AppDBContext> options) : base(options)
         {
@@ -17,6 +16,10 @@ namespace ClassLibrary
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<User>().HasKey(u => u.Id);
+            modelBuilder.Entity<Post>().HasKey(p => p.Id);
+            modelBuilder.Entity<Chat>().HasKey(c => c.Id);
+
             modelBuilder
                 .Entity<Chat>()
                 .HasMany(u => u.Users)

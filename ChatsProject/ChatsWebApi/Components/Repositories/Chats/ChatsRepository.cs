@@ -1,4 +1,5 @@
 ﻿using ClassLibrary;
+using ChatsWebApi.Components.Types;
 using Microsoft.EntityFrameworkCore;
 
 namespace ChatsWebApi.Components.Repositories.Chats
@@ -21,7 +22,7 @@ namespace ChatsWebApi.Components.Repositories.Chats
             var createdItem = await _dbContext.Chats.AddAsync(item);
             await _dbContext.SaveChangesAsync();
 
-            return (Chat?)(await createdItem.GetDatabaseValuesAsync()).ToObject();
+            return createdItem.Entity;
         }
 
         public async Task<bool> DeleteAsync(int id)
@@ -42,10 +43,9 @@ namespace ChatsWebApi.Components.Repositories.Chats
 
         public async Task<Chat?> GetByIdAsync(int id)
         {
-            Chat? chat = await _dbContext.Chats.FirstOrDefaultAsync(c => c.Id == id);
-            if (chat == null )
-                return null;
-
+            Chat? chat = await _dbContext.Chats
+                .Include(c => c.Posts)
+                .FirstOrDefaultAsync(c => c.Id == id);
             return chat;
         }
 

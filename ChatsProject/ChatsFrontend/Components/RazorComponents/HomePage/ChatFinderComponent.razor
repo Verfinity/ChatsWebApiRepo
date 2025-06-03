@@ -1,4 +1,24 @@
 ﻿<div class="input-message-container">
-    <input class="field-input" />
-    <button class="text-container">Join</button>
+    <input class="field-input" @bind-value="EnteredName" />
+    <button class="text-container" @onclick="OnJoinButtonClicked">Join</button>
+    <button class="text-container" @onclick="OnCreateButtonClicked">Create</button>
 </div>
+
+@code {
+    [Parameter]
+    public EventCallback<string> OnJoinToChatCallback { get; set; }
+    [Parameter]
+    public EventCallback<string> OnCreateChatCallback { get; set; }
+
+    public string EnteredName { get; set; } = string.Empty;
+
+    public async Task OnJoinButtonClicked()
+    {
+        await OnJoinToChatCallback.InvokeAsync(EnteredName);
+    }
+
+    public async Task OnCreateButtonClicked()
+    {
+        await OnCreateChatCallback.InvokeAsync(EnteredName);
+    }
+}

@@ -1,4 +1,5 @@
 ﻿using ClassLibrary;
+using ChatsWebApi.Components.Types;
 
 namespace ChatsWebApi.Components.Repositories.ChatsToUsers
 {
@@ -21,7 +22,7 @@ namespace ChatsWebApi.Components.Repositories.ChatsToUsers
             {
                 var createdChatsUsers = await _dbContext.ChatsUsers.AddAsync(chatsUsers);
                 await _dbContext.SaveChangesAsync();
-                return (ChatsUsers?)(await createdChatsUsers.GetDatabaseValuesAsync()).ToObject();
+                return createdChatsUsers.Entity;
             }
             catch
             {

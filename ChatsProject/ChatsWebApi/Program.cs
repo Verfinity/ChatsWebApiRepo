@@ -11,6 +11,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using ChatsWebApi.Components.Types.JWT.Logic.Creation;
 using ChatsWebApi.Components.Repositories.ChatsToUsers;
+using System.Text.Json.Serialization;
+using ChatsWebApi.Components.Types;
 
 namespace ChatsWebApi
 {
@@ -57,7 +59,7 @@ namespace ChatsWebApi
             string? connStr = builder.Configuration.GetConnectionString("Postgres");
             builder.Services.AddDbContext<AppDBContext>(optionsBuilder =>
             {
-                optionsBuilder.UseLazyLoadingProxies().UseNpgsql(connStr, b => b.MigrationsAssembly(typeof(Program).Assembly.GetName().Name));
+                optionsBuilder.UseLazyLoadingProxies(false).UseNpgsql(connStr, b => b.MigrationsAssembly(typeof(Program).Assembly.GetName().Name));
             });
 
             builder.Services.AddTransient<IUsersRepository, UsersRepository>();
@@ -65,7 +67,12 @@ namespace ChatsWebApi
             builder.Services.AddTransient<IPostsRepository, PostsRepository>();
             builder.Services.AddTransient<IChatsUsersRepository, ChatsUsersRepository>();
 
-            builder.Services.AddControllers();
+            builder.Services.AddControllers()
+                .AddJsonOptions(options =>
+                {
+                    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+                    options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+                });
 
 
             var app = builder.Build();

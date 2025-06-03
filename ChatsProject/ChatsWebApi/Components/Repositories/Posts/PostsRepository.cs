@@ -1,4 +1,5 @@
 ﻿using ClassLibrary;
+using ChatsWebApi.Components.Types;
 using Microsoft.EntityFrameworkCore;
 
 namespace ChatsWebApi.Components.Repositories.Posts
@@ -19,13 +20,14 @@ namespace ChatsWebApi.Components.Repositories.Posts
             if (item.User == null || item.Chat == null)
                 return null;
 
+            await _dbContext.Entry(item.Chat).Collection(c => c.Users).LoadAsync();
             if (!item.Chat.Users.Contains(item.User))
                 return null;
 
             var createdItem = await _dbContext.Posts.AddAsync(item);
             await _dbContext.SaveChangesAsync();
 
-            return (Post?)(await createdItem.GetDatabaseValuesAsync()).ToObject();
+            return createdItem.Entity;
         }
 
         public async Task<bool> DeleteAsync(int id)

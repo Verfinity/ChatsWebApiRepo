@@ -3,8 +3,6 @@ using ChatsFrontend.Logic.HttpClients;
 using ChatsFrontend.Logic.SavingData.TokensSaver;
 using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
 using ChatsFrontend.Logic.Authorization;
-using ClassLibrary;
-using Microsoft.AspNetCore.DataProtection;
 
 namespace ChatsFrontend
 {
@@ -13,12 +11,6 @@ namespace ChatsFrontend
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-
-            // Add services to the container.
-            /*
-            builder.Services.AddDataProtection()
-                .PersistKeysToDbContext<AppDBContext>();
-            */
 
             builder.Services.AddRazorComponents()
                 .AddInteractiveServerComponents();

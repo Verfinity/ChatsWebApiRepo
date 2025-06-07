@@ -21,14 +21,8 @@ namespace ChatsWebApi.Components.Controllers
         }
 
         [HttpPost]
-        [Route("current-user")]
-        public async Task<ActionResult<ChatsUsers>> AddCurrentUserToChatAsync([FromQuery] int chatId)
+        public async Task<ActionResult<ChatsUsers>> AddCurrentUserToChatAsync([FromBody] ChatsUsers chatsUsers)
         {
-            var chatsUsers = new ChatsUsers
-            {
-                UserId = int.Parse(HttpContext.User.Identity.Name),
-                ChatId = chatId
-            };
             await _chatsUsersValidator.ValidateAndThrowAsync(chatsUsers);
 
             var createdChatsUsers = await _chatsUsersRepository.AddAsync(chatsUsers);
@@ -38,14 +32,8 @@ namespace ChatsWebApi.Components.Controllers
         }
 
         [HttpDelete]
-        [Route("current-user")]
-        public async Task<ActionResult> RemoveCurrentUserFromChatAsync([FromQuery] int chatId)
+        public async Task<ActionResult> RemoveCurrentUserFromChatAsync([FromBody] ChatsUsers chatsUsers)
         {
-            var chatsUsers = new ChatsUsers
-            {
-                UserId = int.Parse(HttpContext.User.Identity.Name),
-                ChatId = chatId
-            };
             await _chatsUsersValidator.ValidateAndThrowAsync(chatsUsers);
 
             if (await _chatsUsersRepository.RemoveAsync(chatsUsers))

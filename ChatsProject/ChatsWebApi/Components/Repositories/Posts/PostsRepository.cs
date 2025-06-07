@@ -56,6 +56,7 @@ namespace ChatsWebApi.Components.Repositories.Posts
         {
             return await _dbContext.Posts
                 .Where(p => p.ChatId == chatId)
+                .Include(p => p.User)
                 .AsNoTracking()
                 .ToListAsync();
         }

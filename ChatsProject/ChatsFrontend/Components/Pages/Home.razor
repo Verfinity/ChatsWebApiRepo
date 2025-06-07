@@ -8,7 +8,7 @@
         @if (CurrentUser != null)
         {
             <UserAccountComponent UserName="@CurrentUser.NickName" OnSignOutButtonClickCallback="SignOutUserAsync" />
-            <ChatFinderComponent />
+            <ChatFinderComponent OnCreateChatCallback="CreateNewChatAsync" OnJoinToChatCallback="JoinToChatByNameAsync" />
 
             @foreach (var chat in CurrentUser.Chats)
             {
@@ -17,7 +17,7 @@
         }
     </div>
     <div class="chat-data-container">
-        @if (CurrentChat != null)
+        @if (CurrentChat != null && CurrentUser != null)
         {
             <div class="messages-container">
                 @if (CurrentChat.Posts != null)
@@ -35,7 +35,7 @@
                     }
                 }
             </div>
-            <InputFieldComponent />
+            <InputFieldComponent OnMessageEnteredCallback="SendMessageAsync" />
         }
     </div>
 </div>
@@ -69,9 +69,67 @@
     public async Task ChangeCurrentChatAsync(Chat newCurrentChat)
     {
         CurrentChat = newCurrentChat;
-        if (CurrentChat.Posts == null || CurrentChat.Posts.Count() == 0)
+        await UpdateCurrentChatPosts();
+    }
+
+    public async Task SendMessageAsync(string messageContent)
+    {
+        if (CurrentUser == null || CurrentChat == null)
+            return;
+
+        var post = new Post
         {
-            CurrentChat.Posts = await AuthHttpClient.GetAsync<List<Post>>($"posts/?chatId={CurrentChat.Id}");
-        }
+            Content = messageContent,
+            UserId = CurrentUser.Id,
+            ChatId = CurrentChat.Id
+        };
+        await AuthHttpClient.SendAsync("posts", post);
+        await UpdateCurrentChatPosts();
+    }
+
+    public async Task CreateNewChatAsync(string chatName)
+    {
+        var chat = new Chat
+        {
+            Name = chatName
+        };
+        var response = await AuthHttpClient.SendAsync("chats", chat);
+        if (response.StatusCode == HttpStatusCode.BadRequest)
+            return;
+
+        var createdChat = await response.Content.ReadFromJsonAsync<Chat>();
+        await JoinToChatAsync(createdChat);
+    }
+
+    public async Task JoinToChatAsync(Chat chatToJoin)
+    {
+        if (CurrentUser == null || chatToJoin == null)
+            return;
+
+        var chatsUsers = new ChatsUsers
+        {
+            ChatId = chatToJoin.Id,
+            UserId = CurrentUser.Id
+        };
+
+        await AuthHttpClient.SendAsync("chats-users", chatsUsers);
+        await UpdateCurrentUserChats();
+    }
+
+    public async Task JoinToChatByNameAsync(string chatName)
+    {
+        var chat = await AuthHttpClient.GetAsync<Chat>($"chats/{chatName}");
+        if (chat != null)
+            await JoinToChatAsync(chat);
+    }
+
+    private async Task UpdateCurrentChatPosts()
+    {
+        CurrentChat.Posts = await AuthHttpClient.GetAsync<List<Post>>($"posts/?chatId={CurrentChat.Id}");
+    }
+
+    private async Task UpdateCurrentUserChats()
+    {
+        CurrentUser.Chats = await AuthHttpClient.GetAsync<List<Chat>>("chats/current-user");
     }
 }

@@ -32,6 +32,16 @@ namespace ChatsWebApi.Components.Controllers
             return Ok(chats);
         }
 
+        [HttpGet]
+        [Route("{chatName}")]
+        public async Task<ActionResult<Chat>> GetChatByNameAsync([FromRoute] string chatName)
+        {
+            var chat = await _chatsRepo.GetByExpressionAsync(c => c.Name == chatName);
+            if (chat == null)
+                return NoContent();
+            return Ok(chat);
+        }
+
         [HttpPost]
         public async Task<ActionResult<Chat>> CreateNewChatAsync([FromBody] Chat newChat)
         {

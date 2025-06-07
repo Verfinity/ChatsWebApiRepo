@@ -3,7 +3,7 @@
     flex-direction: row;
     justify-content: space-between;
     height: 4%;
-    margin: 5px 0 0 0;
+    margin: 5px 0 5px 0;
 }
 
 .input-message-container button {

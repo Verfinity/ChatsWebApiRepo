@@ -1,6 +1,7 @@
 ﻿using ClassLibrary;
 using ChatsWebApi.Components.Types;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace ChatsWebApi.Components.Repositories.Posts
 {
@@ -48,12 +49,40 @@ namespace ChatsWebApi.Components.Repositories.Posts
 
         public async Task<Post?> GetByIdAsync(int id)
         {
-            return await _dbContext.Posts.FirstOrDefaultAsync(p => p.Id == id);
+            return await GetByExpressionAsync(p => p.Id == id);
         }
 
         public async Task<List<Post>> GetPostsByChatIdAsync(int chatId)
         {
-            return await _dbContext.Posts.Where(p => p.ChatId == chatId).ToListAsync();
+            return await _dbContext.Posts
+                .Where(p => p.ChatId == chatId)
+                .AsNoTracking()
+                .ToListAsync();
+        }
+
+        public async Task<bool> UpdateAsync(Post item)
+        {
+            if (item == null)
+                return false;
+
+            _dbContext.Posts.Update(item);
+            await _dbContext.SaveChangesAsync();
+            return true;
+        }
+
+        public async Task<Post?> GetByExpressionAsync(Expression<Func<Post, bool>> expression)
+        {
+            return await _dbContext.Posts.FirstOrDefaultAsync(expression);
+        }
+
+        public async Task SetCollectionAsync<TProperty>(Post item, Expression<Func<Post, IEnumerable<TProperty>>> expression) where TProperty : class
+        {
+            await _dbContext.Entry(item).Collection(expression).LoadAsync();
+        }
+
+        public async Task SetReferenceAsync<TProperty>(Post item, Expression<Func<Post, TProperty>> expression) where TProperty : class
+        {
+            await _dbContext.Entry(item).Reference(expression).LoadAsync();
         }
     }
 }

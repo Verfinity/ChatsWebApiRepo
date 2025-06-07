@@ -54,7 +54,7 @@ namespace ChatsFrontend.Logic.HttpClients
             return response;
         }
 
-        public async Task<bool> IsAuthorize()
+        public async Task<bool> IsAuthorizeAsync()
         {
             _httpClient.DefaultRequestHeaders.Authorization = null;
             await SetJWTToHttpClientAsync();

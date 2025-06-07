@@ -33,9 +33,9 @@ namespace ChatsWebApi.Components.Controllers
         public async Task<ActionResult<User?>> GetUserById([FromRoute] int userId)
         {
             User? user = await _usersRepo.GetByIdAsync(userId);
-            if (user != null)
-                return Ok(user);
-            return NoContent();
+            if (user == null)
+                return NoContent();
+            return Ok(user);
         }
 
         [HttpGet]
@@ -44,9 +44,10 @@ namespace ChatsWebApi.Components.Controllers
         {
             int id = int.Parse(HttpContext.User.Identity.Name);
             User? user = await _usersRepo.GetByIdAsync(id);
-            if (user != null)
-                return Ok(user);
-            return NoContent();
+            if (user == null)
+                return NoContent();
+            await _usersRepo.SetCollectionAsync(user, u => u.Chats);
+            return Ok(user);
         }
 
         [HttpDelete]

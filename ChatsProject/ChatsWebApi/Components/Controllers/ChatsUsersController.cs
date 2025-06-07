@@ -31,7 +31,7 @@ namespace ChatsWebApi.Components.Controllers
             };
             await _chatsUsersValidator.ValidateAndThrowAsync(chatsUsers);
 
-            var createdChatsUsers = await _chatsUsersRepository.AddUserToChatAsync(chatsUsers);
+            var createdChatsUsers = await _chatsUsersRepository.AddAsync(chatsUsers);
             if (createdChatsUsers != null)
                 return Ok(chatsUsers);
             return BadRequest("This relation already exists!");
@@ -48,7 +48,7 @@ namespace ChatsWebApi.Components.Controllers
             };
             await _chatsUsersValidator.ValidateAndThrowAsync(chatsUsers);
 
-            if (await _chatsUsersRepository.RemoveUserFromChatAsync(chatsUsers))
+            if (await _chatsUsersRepository.RemoveAsync(chatsUsers))
                 return Ok();
             return BadRequest("Can't remove non-existent relation!");
         }

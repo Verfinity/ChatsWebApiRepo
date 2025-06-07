@@ -5,73 +5,73 @@
 
 <div class="main-container">
     <div class="chats-container">
-        @if (User != null)
+        @if (CurrentUser != null)
         {
-            <UserAccountComponent UserName="@User.NickName" OnSignOutButtonClickCallback="SignOutUserAsync" />
+            <UserAccountComponent UserName="@CurrentUser.NickName" OnSignOutButtonClickCallback="SignOutUserAsync" />
             <ChatFinderComponent />
-        }
-        @if (UserChats != null)
-        {
-            foreach (Chat chat in UserChats)
+
+            @foreach (var chat in CurrentUser.Chats)
             {
-                <ChatComponent ChatData="chat" OnClickCallback="GetPostsInChat" />
+                <ChatComponent ChatData="chat" OnClickCallback="ChangeCurrentChatAsync" />
             }
         }
     </div>
     <div class="chat-data-container">
-        <div class="messages-container">
-            @if (CurrentPosts != null)
-            {
-                foreach (Post post in CurrentPosts)
+        @if (CurrentChat != null)
+        {
+            <div class="messages-container">
+                @if (CurrentChat.Posts != null)
                 {
-                    if (post.UserId != User.Id)
+                    foreach (var post in CurrentChat.Posts)
                     {
-                        <InputMessageComponent AuthorName="@post.User.NickName" Content="@post.Content" />
-                    }
-                    else
-                    {
-                        <OutputMessageComponent Content="@post.Content" />
+                        if (post.UserId != CurrentUser.Id)
+                        {
+                            <InputMessageComponent AuthorName="@post.User.NickName" Content="@post.Content" />
+                        }
+                        else
+                        {
+                            <OutputMessageComponent Content="@post.Content" />
+                        }
                     }
                 }
-            }
-        </div>
-        <InputFieldComponent />
+            </div>
+            <InputFieldComponent />
+        }
     </div>
 </div>
 
 @code {
-    public List<Chat> UserChats = new List<Chat>();
-    public List<Post> CurrentPosts = new List<Post>();
-    public User? User = null;
+    public User? CurrentUser = null;
+    public Chat? CurrentChat = null;
 
     protected override async Task OnInitializedAsync()
     {
-        if (await AuthHttpClient.IsAuthorize() == false)
+        if (await AuthHttpClient.IsAuthorizeAsync() == false)
         {
             NavigationManager.NavigateTo("login");
             return;
         }
 
-        User = await AuthHttpClient.GetAsync<User>("users/current-user");
-        UserChats = await AuthHttpClient.GetAsync<List<Chat>>("chats/current-user");
-    }
-
-    private async Task GetPostsInChat(int chatId)
-    {
-        CurrentPosts = await AuthHttpClient.GetAsync<List<Post>>($"posts/?chatId={chatId}");
-        if (CurrentPosts == null)
-            return;
-
-        for (int i = 0; i < CurrentPosts.Count; i++)
+        CurrentUser = await AuthHttpClient.GetAsync<User>("users/current-user");
+        if (CurrentUser == null)
         {
-            var userInPost = await AuthHttpClient.GetAsync<User>($"users/{CurrentPosts[i].UserId}");
-            CurrentPosts[i].User = userInPost;
+            NavigationManager.NavigateTo("login");
+            return;
         }
     }
 
-    private async Task SignOutUserAsync()
+    public async Task SignOutUserAsync()
     {
         await UserAuthorizer.SignOutUserAsync();
         NavigationManager.NavigateTo("login");
+    }
+
+    public async Task ChangeCurrentChatAsync(Chat newCurrentChat)
+    {
+        CurrentChat = newCurrentChat;
+        if (CurrentChat.Posts == null || CurrentChat.Posts.Count() == 0)
+        {
+            CurrentChat.Posts = await AuthHttpClient.GetAsync<List<Post>>($"posts/?chatId={CurrentChat.Id}");
+        }
     }
 }

@@ -11,7 +11,6 @@ namespace ClassLibrary
         public required string Password { get; set; }
         public required Role Role { get; set; }
         public required string RefreshToken { get; set; }
-
         public virtual List<Post> Posts { get; set; } = new List<Post>();
         public virtual List<Chat> Chats { get; set; } = new List<Chat>();
     }

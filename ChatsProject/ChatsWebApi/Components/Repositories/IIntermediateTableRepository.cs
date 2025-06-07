@@ -2,7 +2,7 @@
 {
     public interface IIntermediateTableRepository<T>
     {
-        public Task<T?> AddUserToChatAsync(T obj);
-        public Task<bool> RemoveUserFromChatAsync(T obj);
+        public Task<T?> AddAsync(T obj);
+        public Task<bool> RemoveAsync(T obj);
     }
 }

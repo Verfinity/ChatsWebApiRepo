@@ -32,7 +32,6 @@ namespace ChatsFrontend.Logic.Authorization
         public async Task SignOutUserAsync()
         {
             await _tokenPairSaver.DeleteDataAsync();
-
         }
 
         private async Task<bool> AuthorizeUserAsync(LoginFields loginFields, string authPath)

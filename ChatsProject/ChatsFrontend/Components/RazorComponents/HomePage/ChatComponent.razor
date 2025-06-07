@@ -4,10 +4,10 @@
     [Parameter]
     public Chat ChatData { get; set; }
     [Parameter]
-    public EventCallback<int> OnClickCallback { get; set; }
+    public EventCallback<Chat> OnClickCallback { get; set; }
 
     private async Task OnClicked()
     {
-        await OnClickCallback.InvokeAsync(ChatData.Id);
+        await OnClickCallback.InvokeAsync(ChatData);
     }
 }

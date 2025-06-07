@@ -4,6 +4,6 @@
     {
         public Task<HttpResponseMessage> SendAsync<T>(string path, T obj);
         public Task<T?> GetAsync<T>(string path);
-        public Task<bool> IsAuthorize();
+        public Task<bool> IsAuthorizeAsync();
     }
 }

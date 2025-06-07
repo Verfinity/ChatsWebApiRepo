@@ -69,7 +69,7 @@ namespace ChatsWebApi.Components.Controllers
         {
             await _lfValidator.ValidateAndThrowAsync(loginFields);
 
-            User? user = await _usersRepo.IsExistAsync(loginFields.NickName, loginFields.Password);
+            User? user = await _usersRepo.IsExistAsync(loginFields);
             if (user != null)
             {
                 return Ok(new TokenPair
@@ -85,11 +85,12 @@ namespace ChatsWebApi.Components.Controllers
         [Route("refresh/{refreshToken}")]
         public async Task<ActionResult<TokenPair>> Refresh([FromRoute] string refreshToken)
         {
-            User? user = await _usersRepo.GetByRefreshTokenAsync(refreshToken);
+            User? user = await _usersRepo.GetByExpressionAsync(u => u.RefreshToken == refreshToken);
             if (user != null)
             {
                 string newRefreshToken = Guid.NewGuid().ToString();
-                await _usersRepo.SetRefreshTokenByIdAsync(newRefreshToken, user.Id);
+                user.RefreshToken = newRefreshToken;
+                await _usersRepo.UpdateAsync(user);
 
                 return Ok(new TokenPair
                 {

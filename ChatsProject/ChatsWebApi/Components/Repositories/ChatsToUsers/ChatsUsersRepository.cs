@@ -12,7 +12,7 @@ namespace ChatsWebApi.Components.Repositories.ChatsToUsers
             _dbContext = dbContext;
         }
 
-        public async Task<ChatsUsers?> AddUserToChatAsync(ChatsUsers chatsUsers)
+        public async Task<ChatsUsers?> AddAsync(ChatsUsers chatsUsers)
         {
             var sameChatsUsers = _dbContext.ChatsUsers.FirstOrDefault(cu => cu.ChatId == chatsUsers.ChatId && cu.UserId == chatsUsers.UserId);
             if (sameChatsUsers != null)
@@ -31,7 +31,7 @@ namespace ChatsWebApi.Components.Repositories.ChatsToUsers
 
         }
 
-        public async Task<bool> RemoveUserFromChatAsync(ChatsUsers chatsUsers)
+        public async Task<bool> RemoveAsync(ChatsUsers chatsUsers)
         {
             var sameChatsUsers = _dbContext.ChatsUsers.FirstOrDefault(cu => cu.ChatId == chatsUsers.ChatId && cu.UserId == chatsUsers.UserId);
             if (sameChatsUsers == null)
